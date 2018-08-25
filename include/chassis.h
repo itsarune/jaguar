@@ -2,6 +2,6 @@
 #define _CHASSIS_H_
 
 //set speed of drive system
-void chassisSet(int left, int right);
+void chassisSet(int leftie, int right);
 
 #endif
