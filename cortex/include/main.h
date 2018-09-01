@@ -27,6 +27,8 @@
 
 #include <API.h>
 #include "motorslew.h"
+#include "encoder_pid.h"
+#include "chassis.h"
 
 // Allow usage of this file in C++ programs
 #ifdef __cplusplus

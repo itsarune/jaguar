@@ -2,6 +2,6 @@
 #include "chassis.h"
 
 void chassisSet(int left, int right) {
-  motorReq(2, left);  //edit motor port for left drive
-  motorReq(3, right); //edit motor port for right drive
+  motorReq(leftMotor, left);  //edit motor port for left drive
+  motorReq(rightMotor, right); //edit motor port for right drive
 }
