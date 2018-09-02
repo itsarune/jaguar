@@ -40,4 +40,7 @@ void initialize() {
   //initialize a controller that contrains information for driving straight with right motor
   pid_info driveStraightRight;
   pidSet(&driveStraightRight, 0, 0, 0, rightMotor); //set relevant information
+
+  Encoder encoderRight;
+  encoderRight = encoderInit(1, 2, false);
 }
