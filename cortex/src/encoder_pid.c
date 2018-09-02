@@ -1,7 +1,4 @@
-//include other important functions#
-#include "encoder_pid.h"               
-#include "main.h"
-#include "motorslew.h"
+#include "encoder_pid.h"        //include relevant header
 
 //sets the PID controller values for each instance
 void pidSet(pid_info* pid,

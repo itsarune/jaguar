@@ -11,6 +11,7 @@
  */
 
 #include "main.h"
+#include "encoder_pid.h"
 
 /*
  * Runs pre-initialization code. This function will be started in kernel mode one time while the
@@ -43,5 +44,7 @@ void initialize() {
 
   //initialize controllers that contrain information for driving straight with right motor
   pidSet(&driveStraightRight, 0, 0, 0, rightMotor);
+  pidSet(&driveTurnRight, 0, 0, 0, rightMotor);
+  pidSet(&driveTurnLeft, 0, 0, 0, rightMotor);
   pidSet(&driveStraightLeft, 5, 7, 19, leftMotor);
 }

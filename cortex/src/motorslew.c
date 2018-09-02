@@ -1,6 +1,5 @@
-//include relevant source files
+//include relevant source file
 #include "motorslew.h"
-#include "main.h"      
 
 //rate in which the motor steps
 #define MOTOR_SLEW_RATE  10

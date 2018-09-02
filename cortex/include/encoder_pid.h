@@ -1,6 +1,10 @@
 #ifndef _ENCODER_PID_H_
 #define _ENCODER_PID_H_
 
+//include other important functions#
+#include "main.h"
+#include "motorslew.h"
+
 typedef struct pid {
 
   double p, i, d, motor;
@@ -9,6 +13,12 @@ typedef struct pid {
 /*
   Stores the PID information
 */
+
+//declare PID controllers
+pid_info driveStraightRight;
+pid_info driveStraightLeft;
+pid_info driveTurnRight;
+pid_info driveTurnLeft;
 
 int ratio;
 /*

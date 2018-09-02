@@ -51,6 +51,6 @@ void operatorControl() {
 					turn = joystickGetAnalog(1, 1);								  //x-axis of channel 1
 					chassisSet(power+turn, power-turn);							//tell the robot to drive
 				}
-		delay(20); 																						//let the controller do other tasks
+		delay(20); 																						
 	}
 }
