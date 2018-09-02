@@ -39,7 +39,7 @@ void operatorControl() {
 	int joythresh = 10;
 	int power, turn;                                				//sets the power of the motor
 	while (1) {
-		if(abs(joystickGetAnalog(1, 4))>joythresh) {   			//tank, drastic turn get priority
+		if(abs(joystickGetAnalog(1, 4))>joythresh) {   			  //tank, drastic turns get priority
 			//get the value of the x-axis of the left joystick
 			power = joystickGetAnalog(1, 4);
 			//sets the speed, right motor opposide the left
@@ -47,7 +47,7 @@ void operatorControl() {
 			//has the right joystick moved enough to move the robot?
 		} else if((abs(joystickGetAnalog(1, 1))>joythresh) ||
 				(abs(joystickGetAnalog(1, 2))>joythresh)) {
-					power = joyStickGetAnalog(1, 2); 							  //y-axis of channel 2
+					power = joystickGetAnalog(1, 2); 							  //y-axis of channel 2
 					turn = joystickGetAnalog(1, 1);								  //x-axis of channel 1
 					chassisSet(power+turn, power-turn);							//tell the robot to drive
 				}

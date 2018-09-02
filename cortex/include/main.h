@@ -27,6 +27,8 @@
 
 #include <API.h>
 #include "motorslew.h"
+#include "encoder_pid.h"
+#include "chassis.h"
 
 // Allow usage of this file in C++ programs
 #ifdef __cplusplus
@@ -94,6 +96,14 @@ void initialize();
  * This task should never exit; it should end with some kind of infinite loop, even if empty.
  */
 void operatorControl();
+
+//declare PID controllers
+pid_info driveStraightRight;
+pid_info driveStraightLeft;
+
+//declare encoders
+Encoder encoderRight;
+Encoder encoderLeft;
 
 // End C++ export structure
 #ifdef __cplusplus

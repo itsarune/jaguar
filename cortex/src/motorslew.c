@@ -1,35 +1,57 @@
+//include relevant source files
 #include "motorslew.h"
-#include "main.h"
+#include "main.h"      
 
+//rate in which the motor steps
 #define MOTOR_SLEW_RATE  10
+//delay to request motor speed
 #define MOTOR_TASK_DELAY 15
 
+//requested motor speeds for all motors
 int motor_req[11];
+//current motor speed for all motors
 int motor_speed[11];
+//is this motor being slewed?
 bool motor_slew[11];
 
-void motorslewing() {
-  for(int i = 1; i <= 10; i++) {
+void motorslewing(void * parameter) {              //motor slew function
+  for(int i = 1; i <= 10; i++) {                   //resets all variables
+    //resets all requested motor speeds
     motor_req[i] = 0;
+    //resets all motor slewing states
     motor_slew[i] = false;
+    //rests all motors current speed
     motor_speed[i] = 0;
   }
+  //repeating function through the program
   while(true){
+    //check through every motor in the program
     for(int i = 1; i <= 10; i++){
-      if(motor_slew[i]) {
-        if(motor_req[i] > motor_speed[i]) {        //is the requested speed greater than the current speed?
-          motor_speed[i] += MOTOR_SLEW_RATE;
-          if(motor_speed[i] > motor_req[i]) {      //has the slew rate over-corrected
+      if(motor_slew[i]) {                          //does it require slewing
+        //is the requested speed greater than the current speed?
+        if(motor_req[i] > motor_speed[i]) {
+          motor_speed[i] += MOTOR_SLEW_RATE;       //add the slew value
+          //has the slew rate over-corrected
+          if(motor_speed[i] > motor_req[i]) {
+            //then set the requested speed
             motor_speed[i] = motor_req[i];
+            //the motor need not be slewed anymore, so request can be turned
+            //  off
             motor_slew[i] = false;
           }
-        } else if(motor_req[i] < motor_speed[i]) {
-          motor_speed[i] -= MOTOR_SLEW_RATE;
-          if(motor_speed[i] < motor_req[i]) {       //has it over-corrected
+        } else if(motor_req[i] < motor_speed[i]) { //is a slower speed required
+          motor_speed[i] -= MOTOR_SLEW_RATE;       //lower the speed reasonably
+          if(motor_speed[i] < motor_req[i]) {      //has it over-corrected
+            //set the actual requested speed
             motor_speed[i] = motor_req[i];
+            //the motor need not be slewed anymore, so request can be turned
+            //  off
             motor_slew[i] = false;
           }
         } else {
+          //set the required speed as last slewing already set the required speed
+          motor_speed[i] = motor_req[i];
+          //required speed set, no longer needs to be slewed
           motor_slew[i] = false;
         }
       }
@@ -39,7 +61,8 @@ void motorslewing() {
   }
 }
 
-void motorReq(int channel, int speed) {
+void motorReq(int channel, int speed) {            //speed request
+    //set the requested speed for the requested motor
     motor_req[channel] = speed;
-    motor_slew[channel] = true;
+    motor_slew[channel] = true;                    //motor requires slewing
 }
