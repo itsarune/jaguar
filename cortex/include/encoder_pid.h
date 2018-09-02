@@ -15,7 +15,7 @@ int ratio;
   Sets the ratio for encoder-based turns
 */
 
-void encoderMotor();
+void encoderMotor(pid_info* pid, int target, Encoder* sensor_reading);
 /*
   Uses the quad encoder and PID controller to reach the PID target
 */
@@ -32,7 +32,8 @@ void intRatio(int encoderTicks, int angle);
   Initializes the ratio for encoder-based turns
 */
 
-void encoderTurn(bool turn, float angle);
+void encoderTurn(float angle, Encoder* sensor_reading,
+    pid_info* pid, pid_info* motor2);
 /*
   Turn the robot to specific angles
 */

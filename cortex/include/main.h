@@ -97,6 +97,14 @@ void initialize();
  */
 void operatorControl();
 
+//declare PID controllers
+pid_info driveStraightRight;
+pid_info driveStraightLeft;
+
+//declare encoders
+Encoder encoderRight;
+Encoder encoderLeft;
+
 // End C++ export structure
 #ifdef __cplusplus
 }

@@ -27,6 +27,12 @@
  * so, the robot will await a switch to another mode or disable/enable cycle.
  */
 void autonomous() {
-    taskCreate(motorslewing, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
+    //create the slew-rate task
+    taskCreate(motorslewing, TASK_DEFAULT_STACK_SIZE, NULL,
+      TASK_PRIORITY_DEFAULT);
 
+    //ask the right motor to move forward a certain amount of ticks
+    encoderMotor(&driveStraightRight, 5000, encoderRight);
+    //checking whether structs work by calling p of driveEncoderLeft
+    printf("%f\n", driveStraightLeft.p);
 }

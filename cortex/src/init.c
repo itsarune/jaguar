@@ -37,10 +37,11 @@ void initializeIO() {
  * can be implemented in this task if desired.
  */
 void initialize() {
-  //initialize a controller that contrains information for driving straight with right motor
-  pid_info driveStraightRight;
-  pidSet(&driveStraightRight, 0, 0, 0, rightMotor); //set relevant information
-
-  Encoder encoderRight;
+  //define encoders, remember to change ports and review reverses
   encoderRight = encoderInit(1, 2, false);
+  encoderLeft = encoderInit(3, 4, true);
+
+  //initialize controllers that contrain information for driving straight with right motor
+  pidSet(&driveStraightRight, 0, 0, 0, rightMotor);
+  pidSet(&driveStraightLeft, 5, 7, 19, leftMotor);
 }
