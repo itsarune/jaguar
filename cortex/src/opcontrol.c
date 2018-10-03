@@ -34,6 +34,10 @@ void operatorControl() {
 
 	//_DRONE_CONTROL_
 
+	motorSet(1, -257);
+	delay(500);
+	motorSet(1, 0);
+
 	//this variable ensures that each movement was meant to occur rather
 	//than a roaming joystick
 	int joythresh = 10;
@@ -51,6 +55,6 @@ void operatorControl() {
 					turn = joystickGetAnalog(1, 1);								  //x-axis of channel 1
 					chassisSet(power+turn, power-turn);							//tell the robot to drive
 				}
-		delay(20); 																						
+		delay(20);
 	}
 }
