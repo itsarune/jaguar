@@ -31,13 +31,8 @@
  * This task should never exit; it should end with some kind of infinite loop, even if empty.
  */
 void operatorControl() {
-
-	//_DRONE_CONTROL_
-
-	motorSet(1, -257);
-	delay(500);
-	motorSet(1, 0);
-
+	taskCreate(motorslewing, TASK_DEFAULT_STACK_SIZE, NULL,
+		TASK_PRIORITY_DEFAULT);
 	//this variable ensures that each movement was meant to occur rather
 	//than a roaming joystick
 	int joythresh = 10;

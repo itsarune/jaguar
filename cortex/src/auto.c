@@ -11,6 +11,7 @@
  */
 
 #include "main.h"
+#include "encoder_pid.h"
 
 /*
  * Runs the user autonomous code. This function will be started in its own task with the default
@@ -28,11 +29,8 @@
  */
 void autonomous() {
     //create the slew-rate task
-    taskCreate(motorslewing, TASK_DEFAULT_STACK_SIZE, NULL,
-      TASK_PRIORITY_DEFAULT);
-
     //ask the right motor to move forward a certain amount of ticks
-    encoderMotor(&driveStraightRight, 5000, encoderRight);
+    encoderMotor(&driveStraightRight, 5000, &encoderRight);
     //checking whether structs work by calling p of driveEncoderLeft
     printf("%f\n", driveStraightLeft.p);
 }
