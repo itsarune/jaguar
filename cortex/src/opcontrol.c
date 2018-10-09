@@ -35,7 +35,7 @@ void operatorControl() {
 		TASK_PRIORITY_DEFAULT);
 	//this variable ensures that each movement was meant to occur rather
 	//than a roaming joystick
-	int joythresh = 10;
+	int joythresh = 11;
 	int power, turn;                                				//sets the power of the motor
 	while (1) {
 		if(abs(joystickGetAnalog(1, 4))>joythresh) {   			  //tank, drastic turns get priority
