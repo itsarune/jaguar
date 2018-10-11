@@ -31,25 +31,35 @@
  * This task should never exit; it should end with some kind of infinite loop, even if empty.
  */
 void operatorControl() {
-	taskCreate(motorslewing, TASK_DEFAULT_STACK_SIZE, NULL,
-		TASK_PRIORITY_DEFAULT);
+	/*while(1){
+	motorSet(5, 100);
+	motorSet(2, 100);
+	motorSet(3,100);
+	motorSet(4,100);
+}*/
+	//taskCreate(motorslewing, TASK_DEFAULT_STACK_SIZE, NULL,
+		//TASK_PRIORITY_DEFAULT);
+
 	//this variable ensures that each movement was meant to occur rather
 	//than a roaming joystick
 	int joythresh = 11;
-	int power, turn;                                				//sets the power of the motor
+	int power = 0;
+	int turn = 0;                               				//sets the power of the motor
 	while (1) {
-		if(abs(joystickGetAnalog(1, 4))>joythresh) {   			  //tank, drastic turns get priority
+		/*if(abs(joystickGetAnalog(1, 4))>joythresh) {   			  //tank, drastic turns get priority
 			//get the value of the x-axis of the left joystick
 			power = joystickGetAnalog(1, 4);
 			//sets the speed, right motor opposide the left
 			chassisSet(power, -1*power);
 			//has the right joystick moved enough to move the robot?
-		} else if((abs(joystickGetAnalog(1, 1))>joythresh) ||
+		} */
+		if((abs(joystickGetAnalog(1, 1))>joythresh) ||
 				(abs(joystickGetAnalog(1, 2))>joythresh)) {
 					power = joystickGetAnalog(1, 2); 							  //y-axis of channel 2
 					turn = joystickGetAnalog(1, 1);								  //x-axis of channel 1
-					chassisSet(power+turn, power-turn);							//tell the robot to drive
+					chassisSet((power+turn), (power-turn));							//tell the robot to drive
 				}
-		delay(20);
+		
+		delay(2);
 	}
 }
