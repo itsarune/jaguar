@@ -28,15 +28,10 @@
  * so, the robot will await a switch to another mode or disable/enable cycle.
  */
 void autonomous() {
-  /*while(1){
-	motorSet(1, 100);
-	motorSet(2, 100);
-	motorSet(3,100);
-	motorSet(4,100);
-}*/
     //create the slew-rate task
+
     //ask the right motor to move forward a certain amount of ticks
-    /*encoderMotor(&driveStraightRight, 5000, &encoderRight);
+    //encoderMotor(&driveStraightRight, 5000, encoderRight);
     //checking whether structs work by calling p of driveEncoderLeft
-    printf("%f\n", driveStraightLeft.p);*/
+    printf("%f\n", driveStraightLeft.p);
 }
