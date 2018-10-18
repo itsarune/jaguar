@@ -39,6 +39,7 @@ void operatorControl() {
 	//this variable ensures that each movement was meant to occur rather
 	//than a roaming joystick
 	int joythresh = 10;
+	int turnJoy = 50;
 	int power = 0;
 	int turn = 0;                               				//sets the power of the motor
 	bool run = false;
@@ -49,33 +50,26 @@ void operatorControl() {
 			run = true;
 		}
 		if (run) {
-			if (abs(joystickGetAnalog(1, 3)) > joythresh) {
+			if (((abs(joystickGetAnalog(1, 1))) > turnJoy) || (abs(joystickGetAnalog(1, 2)) > turnJoy)) {
+				turn = (joystickGetAnalog(1, 1)/4);
+				power = (joystickGetAnalog(1,2)/4);
+			} else if (abs(joystickGetAnalog(1, 3)) > joythresh) {
 				power = joystickGetAnalog(1, 3);
 				turn = joystickGetAnalog(1, 4);
-			} else
+			} else {
 				power = 0;
+				turn = 0;
+			}
 			chassisSet(power+turn, power-turn);
 			delay(2);
 			if (joystickGetDigital(1, 7, JOY_RIGHT))
 			{
 				run = false;
 				power = 0;
+				turn = 0;
 				printf("power off\n");
 			}
 			printf("%d, %d\n", joystickGetAnalog(1, 3), power);
 		}
 	}
-	/*while (1) {
-		if(abs(joystickGetAnalog(1, 4))>joythresh) {   			  //tank, drastic turns get priority
-			//get the value of the x-axis of the left joystick
-			power = joystickGetAnalog(1, 4);
-			//sets the speed, right motor opposide the left
-			chassisSet(power, -1*power);
-			//has the right joystick moved enough to move the robot?
-		} else if((abs(joystickGetAnalog(1, 1))>joythresh) ||
-				(abs(joystickGetAnalog(1, 2))>joythresh)) {
-					power = joystickGetAnalog(1, 2); 							  //y-axis of channel 2
-					turn = joystickGetAnalog(1, 1);								  //x-axis of channel 1
-					chassisSet(power+turn, power-turn);							//tell the robot to drive
-				}*/
 }

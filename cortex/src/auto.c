@@ -28,6 +28,7 @@
  * so, the robot will await a switch to another mode or disable/enable cycle.
  */
 void autonomous() {
+  delay(5000);
     printf("we're doing autonomous now");
     //create the slew-rate task
 
