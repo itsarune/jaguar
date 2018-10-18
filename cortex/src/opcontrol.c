@@ -32,30 +32,38 @@
  */
 void operatorControl() {
 
-	taskCreate(motorslewing, TASK_DEFAULT_STACK_SIZE, NULL,
-		TASK_PRIORITY_DEFAULT);
+	taskCreate(motorslewing, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_DEFAULT);
 
 	//_DRONE_CONTROL_
 
 	//this variable ensures that each movement was meant to occur rather
 	//than a roaming joystick
 	int joythresh = 10;
-	int power, turn;                                				//sets the power of the motor
+	int power = 0;
+	int turn = 0;                               				//sets the power of the motor
 	bool run = false;
 	while(1) {
 		if (joystickGetDigital(1, 7, JOY_LEFT))
+		{
+			printf("power on");
 			run = true;
+		}
 		if (run) {
-			if (abs(joystickGetAnalog(1, 3) > joythresh)) {
+			if (abs(joystickGetAnalog(1, 3)) > joythresh) {
 				power = joystickGetAnalog(1, 3);
+				turn = joystickGetAnalog(1, 4);
 			} else
 				power = 0;
-			chassisSet(power, power);
+			chassisSet(power+turn, power-turn);
 			delay(2);
+			if (joystickGetDigital(1, 7, JOY_RIGHT))
+			{
+				run = false;
+				power = 0;
+				printf("power off\n");
+			}
+			printf("%d, %d\n", joystickGetAnalog(1, 3), power);
 		}
-		if (joystickGetDigital(1, 7, JOY_RIGHT))
-			run = false;
-
 	}
 	/*while (1) {
 		if(abs(joystickGetAnalog(1, 4))>joythresh) {   			  //tank, drastic turns get priority

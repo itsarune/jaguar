@@ -2,8 +2,8 @@
 
 void chassisSet(int left, int right) { //sets the speed of the drive system
   //motordrive systems
-  motorReq(leftMotor1, left);
-  motorReq(rightMotor1, right);
-  motorReq(leftMotor2, left);
-  motorReq(rightMotor2, right);
+  motorSet(leftMotor1, left);
+  motorSet(rightMotor1, -right);
+  motorSet(leftMotor2, left);
+  motorSet(rightMotor2, -right);
 }

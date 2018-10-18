@@ -12,6 +12,9 @@
 #define rightMotor2 5
 
 //set speed of drive system
-void chassisSet(int left, int right);
+void chassisSet(int left, int right); //sets the speed of the drive system
+  //motordrive systems
+
+
 
 #endif
