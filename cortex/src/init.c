@@ -47,5 +47,5 @@ void initialize() {
   pidSet(&driveStraightRight, 0, 0, 0, rightMotor1);
   pidSet(&driveTurnRight, 0, 0, 0, rightMotor1);
   pidSet(&driveTurnLeft, 0, 0, 0, leftMotor1);
-  pidSet(&driveStraightLeft, 5, 7, 19, leftMotor1);
+  pidSet(&driveStraightLeft, 0.5, 0, 0, leftMotor1);
 }

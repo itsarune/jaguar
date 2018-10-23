@@ -36,4 +36,6 @@ void autonomous() {
     //encoderMotor(&driveStraightRight, 5000, encoderRight);
     //checking whether structs work by calling p of driveEncoderLeft
     printf("%f\n", driveStraightLeft.p);
+    encoderMotor(&driveStraightRight, 5000, &encoderRight);
+    encoderMotor(&driveStraightLeft, 5000, &encoderLeft);
 }
