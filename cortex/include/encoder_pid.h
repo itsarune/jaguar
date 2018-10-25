@@ -1,7 +1,7 @@
 #ifndef _ENCODER_PID_H_
 #define _ENCODER_PID_H_
 
-//include other important functions#
+//include other important functions
 #include "main.h"
 #include "motorslew.h"
 
