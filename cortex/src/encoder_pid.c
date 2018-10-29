@@ -42,7 +42,7 @@ void encoderMotor(pid_info* pid, int target, Encoder* sensor_reading) {
     //put the whole PID shenanigan together and calculate the speed
     speed = (pid->p*error) + (pid->i*integral) + (pid->d*derivative);
 
-    motorReq(pid->motor, speed);        //request the calculated motor speed
+    chassisSet(speed, speed);        //request the calculated motor speed
 
     //if the previous two errors were 0, then the robot has probably stopped,
     //  so exit the program

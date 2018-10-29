@@ -40,7 +40,7 @@ void initializeIO() {
  */
 void initialize() {
   //define encoders, remember to change ports and review reverses
-  encoderRight = encoderInit(1, 2, false);
+  encoderRight = encoderInit(1, 2, true);
   encoderLeft = encoderInit(3, 4, true);
 
   //initialize controllers that contrain information for driving straight with right motor

@@ -4,6 +4,8 @@
 //include other important functions
 #include "main.h"
 #include "motorslew.h"
+#include "encoder_pid.h"
+#include "chassis.h"
 
 typedef struct pid {
 

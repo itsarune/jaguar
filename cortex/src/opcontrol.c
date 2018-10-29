@@ -46,7 +46,6 @@ void operatorControl() {
 	while(1) {
 		if (joystickGetDigital(1, 7, JOY_LEFT))
 		{
-			printf("power on");
 			run = true;
 		}
 		if (run) {
@@ -67,9 +66,9 @@ void operatorControl() {
 				run = false;
 				power = 0;
 				turn = 0;
-				printf("power off\n");
 			}
-			printf("%d, %d\n", joystickGetAnalog(1, 3), power);
 		}
+		printf("the encoder value%d", encoderGet(encoderRight));
 	}
+
 }
