@@ -27,6 +27,7 @@ void encoderMotor(pid_info* pid, int target, Encoder* sensor_reading) {
   while(run) {
 
     sense = encoderGet(sensor_reading); //get encoder readings
+    printf("\nsense%d", sense);
 
     //calculate the error from target to current readings
     error = target - sense;
@@ -52,7 +53,7 @@ void encoderMotor(pid_info* pid, int target, Encoder* sensor_reading) {
     lastError = error;
 
     printf("%d", error);
-    delay(20);
+    delay(2);
   }
 }
 

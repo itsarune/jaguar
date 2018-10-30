@@ -11,6 +11,7 @@
  */
 
 #include "main.h"
+#include "encoder_pid.h"
 #include "chassis.h"
 
 /*
@@ -31,9 +32,8 @@
  * This task should never exit; it should end with some kind of infinite loop, even if empty.
  */
 void operatorControl() {
-
+	encoderReset(encoderRight);
 	taskCreate(motorslewing, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_DEFAULT);
-
 	//_DRONE_CONTROL_
 
 	//this variable ensures that each movement was meant to occur rather
@@ -49,6 +49,11 @@ void operatorControl() {
 			run = true;
 		}
 		if (run) {
+			printf("start");
+			encoderMotor(&driveStraightRight, 5000, &encoderRight);
+			//printf("printing");
+			//count = encoderGet(encoderRight);
+			//printf("\nthe encoder value%d, %d", count, encoderGet(encoderLeft));
 			if (((abs(joystickGetAnalog(1, 1))) > turnJoy) || (abs(joystickGetAnalog(1, 2)) > turnJoy)) {
 				turn = (joystickGetAnalog(1, 1)/4);
 				power = (joystickGetAnalog(1,2)/4);
@@ -68,7 +73,7 @@ void operatorControl() {
 				turn = 0;
 			}
 		}
-		printf("the encoder value%d", encoderGet(encoderRight));
+		printf("test");
 	}
 
 }
