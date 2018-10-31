@@ -13,6 +13,7 @@
 #include "main.h"
 #include "encoder_pid.h"
 #include "chassis.h"
+#include "tracking.h"
 
 /*
  * Runs the user operator control code. This function will be started in its own task with the
@@ -74,6 +75,7 @@ void operatorControl() {
 			}
 		}
 		printf("test");
+		tracking();
 	}
 
 }
