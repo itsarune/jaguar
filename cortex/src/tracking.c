@@ -1,4 +1,5 @@
 #include "tracking.h"
+#include "encoder_pid.h"
 #include <math.h>
 
 /*
@@ -132,4 +133,18 @@ if(prevaction != action) //this if statement will be true when we change what we
 }
 
 prevaction = action; //Update the previous action
+}
+
+//------------ EXPERIMENT. To be used with ball shooter. Not sure if it works ------------
+void align() {
+  float requiredMovement = angle * encoderturn; //Calculate encoder ticks required to align straight
+
+  if(angle <= 180) { //Check if the robot should turn left or right
+    encoderMotor(&driveStraightRight, requiredMovement, &encoderRight);
+    encoderMotor(&driveStraightLeft, -requiredMovement, &encoderLeft);
+  }
+  else {
+    encoderMotor(&driveStraightRight, -requiredMovement, &encoderRight);
+    encoderMotor(&driveStraightLeft, requiredMovement, &encoderLeft);
+  }
 }

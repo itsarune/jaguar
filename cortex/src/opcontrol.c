@@ -56,11 +56,23 @@ void operatorControl() {
 			//count = encoderGet(encoderRight);
 			//printf("\nthe encoder value%d, %d", count, encoderGet(encoderLeft));
 			if (((abs(joystickGetAnalog(1, 1))) > turnJoy) || (abs(joystickGetAnalog(1, 2)) > turnJoy)) {
-				turn = (joystickGetAnalog(1, 1)/4);
-				power = (joystickGetAnalog(1,2)/4);
-			} else if (abs(joystickGetAnalog(1, 3)) > joythresh) {
-				power = joystickGetAnalog(1, 3);
-				turn = joystickGetAnalog(1, 4);
+				if(abs(joystickGetAnalog(1, 2)) >= abs(joystickGetAnalog(1,1))) {
+					power = joystickGetAnalog(1, 2) / 4;
+					turn = 0;
+				}
+				else {
+					power = 0;
+					turn = joystickGetAnalog(1, 1) / 4;
+				}
+			} else if (abs(joystickGetAnalog(1, 3)) > joythresh || abs(joystickGetAnalog(1, 4)) > joythresh) {
+				if(abs(joystickGetAnalog(1, 3)) >= abs(joystickGetAnalog(1,4))) {
+					power = joystickGetAnalog(1, 3);
+					turn = 0;
+				}
+				else {
+					power = 0;
+					turn = joystickGetAnalog(1, 4);
+				}
 			} else {
 				power = 0;
 				turn = 0;

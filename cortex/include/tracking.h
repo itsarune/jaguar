@@ -8,6 +8,7 @@
 //Tracks the position of the robot on the field
 void tracking();
 
-
+//Aligns the robot to the flags
+void align();
 
 #endif
