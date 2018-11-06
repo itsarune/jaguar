@@ -63,6 +63,7 @@ void operatorControl() {
 					power = 0;
 					turn = joystickGetAnalog(1, 1) / 4;
 				}
+
 			} else if (abs(joystickGetAnalog(1, 3)) > joythresh || abs(joystickGetAnalog(1, 4)) > joythresh) {
 				if(abs(joystickGetAnalog(1, 3)) >= abs(joystickGetAnalog(1,4))) {
 					power = joystickGetAnalog(1, 3);
