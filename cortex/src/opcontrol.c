@@ -44,6 +44,7 @@ void operatorControl() {
 	int turn = 0;                               				//sets the power of the motor
 	bool run = false;
 	while(1) {
+		printf("running, you bastard");
 		if (joystickGetDigital(1, 7, JOY_LEFT))
 		{
 			run = true;
