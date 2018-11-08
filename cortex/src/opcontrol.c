@@ -66,7 +66,7 @@ void operatorControl() {
 				turn = 0;
 			}
 			chassisSet(power+turn, power-turn);
-			delay(2);
+			delay(10);
 			if (joystickGetDigital(1, 7, JOY_RIGHT))
 			{
 				run = false;

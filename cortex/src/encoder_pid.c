@@ -53,7 +53,7 @@ void encoderMotor(pid_info* pid, int target, Encoder* sensor_reading) {
     lastError = error;
 
     printf(", %d, %d", error, speed);
-    delay(2);
+    delay(10);
   }
 }
 
