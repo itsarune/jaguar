@@ -48,4 +48,6 @@ void initialize() {
   pidSet(&driveTurnRight, 0.5, 0, 0, rightMotor1);
   pidSet(&driveTurnLeft, 0, 0, 0, leftMotor1);
   pidSet(&driveStraightLeft, 0.5, 0, 0, leftMotor1);
+  lcdInit(uart1);
+  lcdClear(uart1);
 }

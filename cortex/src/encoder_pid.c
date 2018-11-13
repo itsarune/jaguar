@@ -51,9 +51,9 @@ void encoderMotor(pid_info* pid, int target, Encoder* sensor_reading) {
 
     //end of loop, current error becomes the last error for the next run
     lastError = error;
-
-    printf(", %d, %d", error, speed);
-    delay(10);
+    lcdClear(uart1);
+    lcdPrint(uart1, 1, "error is %d", error);
+    delay(2);
   }
 }
 
