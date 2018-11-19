@@ -79,8 +79,8 @@ float ypos = 0;
 int prevaction = 1;
 float angle = 0;
 
-const float encodermove = 9.89/360; //Encoder value to move the robot 1 in, depends on build
-const float encoderturn = 10; //Encoder value to turn the robot 1 degree
+const float encodermove = 36.285; //Encoder value to move the robot 1 in, depends on build
+const float encoderturn = 6.17; //Encoder value to turn the robot 1 degree
 
 void tracking() {
 float distance = 0;
