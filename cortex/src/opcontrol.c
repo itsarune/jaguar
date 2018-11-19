@@ -11,7 +11,9 @@
  */
 
 #include "main.h"
+#include "encoder_pid.h"
 #include "chassis.h"
+#include "tracking.h"
 
 /*
  * Runs the user operator control code. This function will be started in its own task with the
@@ -31,9 +33,8 @@
  * This task should never exit; it should end with some kind of infinite loop, even if empty.
  */
 void operatorControl() {
-
+	encoderReset(encoderRight);
 	taskCreate(motorslewing, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_DEFAULT);
-
 	//_DRONE_CONTROL_
 
 	//this variable ensures that each movement was meant to occur rather
@@ -46,16 +47,32 @@ void operatorControl() {
 	while(1) {
 		if (joystickGetDigital(1, 7, JOY_LEFT))
 		{
-			printf("power on");
 			run = true;
 		}
 		if (run) {
+			printf("start");
+			//printf("printing");
+			//count = encoderGet(encoderRight);
+			//printf("\nthe encoder value%d, %d", count, encoderGet(encoderLeft));
 			if (((abs(joystickGetAnalog(1, 1))) > turnJoy) || (abs(joystickGetAnalog(1, 2)) > turnJoy)) {
-				turn = (joystickGetAnalog(1, 1)/4);
-				power = (joystickGetAnalog(1,2)/4);
-			} else if (abs(joystickGetAnalog(1, 3)) > joythresh) {
-				power = joystickGetAnalog(1, 3);
-				turn = joystickGetAnalog(1, 4);
+				if(abs(joystickGetAnalog(1, 2)) >= abs(joystickGetAnalog(1,1))) {
+					power = joystickGetAnalog(1, 2) / 4;
+					turn = 0;
+				}
+				else {
+					power = 0;
+					turn = joystickGetAnalog(1, 1) / 4;
+				}
+
+			} else if (abs(joystickGetAnalog(1, 3)) > joythresh || abs(joystickGetAnalog(1, 4)) > joythresh) {
+				if(abs(joystickGetAnalog(1, 3)) >= abs(joystickGetAnalog(1,4))) {
+					power = joystickGetAnalog(1, 3);
+					turn = 0;
+				}
+				else {
+					power = 0;
+					turn = joystickGetAnalog(1, 4);
+				}
 			} else {
 				power = 0;
 				turn = 0;
@@ -67,9 +84,10 @@ void operatorControl() {
 				run = false;
 				power = 0;
 				turn = 0;
-				printf("power off\n");
 			}
-			printf("%d, %d\n", joystickGetAnalog(1, 3), power);
 		}
+		printf("test");
+		tracking();
 	}
+
 }

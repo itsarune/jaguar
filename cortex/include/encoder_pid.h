@@ -4,6 +4,8 @@
 //include other important functions
 #include "main.h"
 #include "motorslew.h"
+#include "encoder_pid.h"
+#include "chassis.h"
 
 typedef struct pid {
 
@@ -23,6 +25,7 @@ pid_info driveTurnLeft;
 int ratio;
 /*
   Sets the ratio for encoder-based turns
+
 */
 
 void encoderMotor(pid_info* pid, int target, Encoder* sensor_reading);
