@@ -48,7 +48,7 @@ void encoderMotor(pid_info* pid, int target, Encoder* sensor_reading) {
 
     //if the previous two errors were 0, then the robot has probably stopped,
     //  so exit the program
-    if ((error == 0 && lastError == 0) or millis() >= timeout) { run = false; }
+    if ((error == 0 && lastError == 0) || int(millis()) >= timeout) { run = false; }
 
     //end of loop, current error becomes the last error for the next run
     lastError = error;
