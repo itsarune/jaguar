@@ -32,7 +32,6 @@
  *
  * This task should never exit; it should end with some kind of infinite loop, even if empty.
  */
-
 void operatorControl() {
 	encoderReset(encoderRight);
 	taskCreate(motorslewing, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_DEFAULT);
@@ -45,17 +44,13 @@ void operatorControl() {
 	int power = 0;
 	int turn = 0;                               				//sets the power of the motor
 	bool run = false;
-	int prevEncoderLeft = 0;
-	int prevEncoderRight = 0;
-	float driftMultiplierRight = 1;
-	float driftMultiplierLeft = 1;
-	printf("start");
 	while(1) {
 		if (joystickGetDigital(1, 7, JOY_LEFT))
 		{
 			run = true;
 		}
 		if (run) {
+			printf("start");
 			//printf("printing");
 			//count = encoderGet(encoderRight);
 			//printf("\nthe encoder value%d, %d", count, encoderGet(encoderLeft));
@@ -82,20 +77,7 @@ void operatorControl() {
 				power = 0;
 				turn = 0;
 			}
-
-			if(abs(encoderGet(encoderLeft) - prevEncoderLeft) != abs(encoderGet(encoderRight) - prevEncoderRight)) {
-				driftMultiplierLeft = 1;
-				driftMultiplierRight = abs(encoderGet(encoderLeft) - prevEncoderLeft) / abs(encoderGet(encoderRight) - prevEncoderRight);
-				if(driftMultiplierRight > 1) {
-					driftMultiplierRight = 1;
-					driftMultiplierLeft = abs(encoderGet(encoderRight) - prevEncoderRight) / abs(encoderGet(encoderLeft) - prevEncoderLeft);
-				}
-
-				prevEncoderLeft = encoderGet(encoderLeft);
-				prevEncoderRight = encoderGet(encoderRight);
-			}
-
-			chassisSet((power+turn)*driftMultiplierLeft, (power-turn)*driftMultiplierRight);
+			chassisSet(power+turn, power-turn);
 			delay(2);
 			if (joystickGetDigital(1, 7, JOY_RIGHT))
 			{
