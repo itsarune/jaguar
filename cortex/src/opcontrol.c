@@ -51,7 +51,7 @@ void operatorControl() {
 		}
 		if (run) {
 			print("start");
-			//encoderMotor(&driveStraightRight, 500, &encoderRight);
+			encoderMotor(&driveStraightRight, 500, &encoderRight);
 			//printf("printing");
 			//count = encoderGet(encoderRight);
 			//printf("\nthe encoder value%d, %d", count, encoderGet(encoderLeft));

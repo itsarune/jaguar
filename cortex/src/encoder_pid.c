@@ -22,7 +22,8 @@ void encoderMotor(pid_info* pid, int target, Encoder* sensor_reading) {
   int integral = 0;                     //resets the integral value
   bool run = true;                      //start the PID controller
   //initialize the error, derivative and resulting speed values
-  int error, derivative, speed, timeout;
+  int error, derivative, speed;
+  int timeout;
 
   while(run) {
     timeout = millis() + 10*target/2;
@@ -52,8 +53,6 @@ void encoderMotor(pid_info* pid, int target, Encoder* sensor_reading) {
 
     //end of loop, current error becomes the last error for the next run
     lastError = error;
-    lcdClear(uart1);
-    lcdPrint(uart1, 1, "error is %d", error);
     delay(2);
   }
 }
