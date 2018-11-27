@@ -59,29 +59,39 @@ void operatorControl() {
 			//printf("printing");
 			//count = encoderGet(encoderRight);
 			//printf("\nthe encoder value%d, %d", count, encoderGet(encoderLeft));
-			if (((abs(joystickGetAnalog(1, 1))) > turnJoy) || (abs(joystickGetAnalog(1, 2)) > turnJoy)) {
-				if(abs(joystickGetAnalog(1, 2)) >= abs(joystickGetAnalog(1,1))) {
-					power = joystickGetAnalog(1, 2) / 4;
-					turn = 0;
-				}
-				else {
-					power = 0;
-					turn = joystickGetAnalog(1, 1) / 4;
-				}
-
-			} else if (abs(joystickGetAnalog(1, 3)) > joythresh || abs(joystickGetAnalog(1, 4)) > joythresh) {
+			if ((abs(joystickGetAnalog(1, 3)) > joythresh || abs(joystickGetAnalog(1, 4)) > joythresh) && (joystickGetDigital(1, 5, JOY_UP) || joystickGetDigital(1, 6, JOY_UP))) {
 				if(abs(joystickGetAnalog(1, 3)) >= abs(joystickGetAnalog(1,4))) {
-					power = joystickGetAnalog(1, 3);
+					power = joystickGetAnalog(1, 3) / 7;
 					turn = 0;
 				}
 				else {
 					power = 0;
-					turn = joystickGetAnalog(1, 4);
+					turn = joystickGetAnalog(1, 4) / 7;
 				}
-			} else {
+			}
+			else if (abs(joystickGetAnalog(1, 3)) > joythresh || abs(joystickGetAnalog(1, 4)) > joythresh) {
+				if(abs(joystickGetAnalog(1, 3)) >= abs(joystickGetAnalog(1,4))) {
+					power = joystickGetAnalog(1, 3) / 4;
+					turn = 0;
+				}
+				else {
+					power = 0;
+					turn = joystickGetAnalog(1, 4) / 4;
+				}
+			}
+			else if (abs(joystickGetAnalog(1, 1)) > joythresh || abs(joystickGetAnalog(1, 2)) > joythresh) {
+				if(abs(joystickGetAnalog(1, 2)) >= abs(joystickGetAnalog(1,1))) {
+					power = joystickGetAnalog(1, 2);
+					turn = 0;
+				}
+				else {
+					power = 0;
+					turn = joystickGetAnalog(1, 1);
+				}
+			}  
+			else {
 				power = 0;
 				turn = 0;
-				//test
 			}
 
 			if(abs(encoderGet(encoderLeft) - prevEncoderLeft) != abs(encoderGet(encoderRight) - prevEncoderRight)) {
