@@ -81,6 +81,7 @@ void operatorControl() {
 			} else {
 				power = 0;
 				turn = 0;
+				//test commit
 			}
 
 			if(abs(encoderGet(encoderLeft) - prevEncoderLeft) != abs(encoderGet(encoderRight) - prevEncoderRight)) {
