@@ -41,14 +41,14 @@ void operatorControl() {
 	//this variable ensures that each movement was meant to occur rather
 	//than a roaming joystick
 	int joythresh = 10;
-	int turnJoy = 50;
+	//int turnJoy = 50;
 	int power = 0;
 	int turn = 0;                               				//sets the power of the motor
 	bool run = false;
-	int prevEncoderLeft = 0;
+	/*int prevEncoderLeft = 0;
 	int prevEncoderRight = 0;
 	float driftMultiplierRight = 1;
-	float driftMultiplierLeft = 1;
+	float driftMultiplierLeft = 1;*/
 	printf("start");
 	while(1) {
 		if (joystickGetDigital(1, 7, JOY_LEFT))
@@ -94,7 +94,7 @@ void operatorControl() {
 				turn = 0;
 			}
 
-			if(abs(encoderGet(encoderLeft) - prevEncoderLeft) != abs(encoderGet(encoderRight) - prevEncoderRight)) {
+			/*if(abs(encoderGet(encoderLeft) - prevEncoderLeft) != abs(encoderGet(encoderRight) - prevEncoderRight)) {
 				driftMultiplierLeft = 1;
 				driftMultiplierRight = abs(encoderGet(encoderLeft) - prevEncoderLeft) / abs(encoderGet(encoderRight) - prevEncoderRight);
 				if(driftMultiplierRight > 1) {
@@ -104,9 +104,9 @@ void operatorControl() {
 
 				prevEncoderLeft = encoderGet(encoderLeft);
 				prevEncoderRight = encoderGet(encoderRight);
-			}
+			}*/
 
-			chassisSet((power+turn)*driftMultiplierLeft, (power-turn)*driftMultiplierRight);
+			chassisSet((power+turn), (power-turn));
 			delay(2);
 			if (joystickGetDigital(1, 7, JOY_RIGHT))
 			{

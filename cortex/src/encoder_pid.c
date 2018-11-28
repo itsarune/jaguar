@@ -25,50 +25,79 @@ int getEncoderRight() {
   This function uses a PID controller using information from the PID structure
   to move the robot based on sensor-readings (typically encocder-ticks)
 */
+struct pidData {
+  float sense;
+  int lastError;
+  int integral;
+  int error, derivative, speed;
+} pidData;
+
+void Reset(struct pidData data)
+{
+  data.derivative = 0;
+  data.error = 0;
+  data.integral = 0;
+  data.lastError = 0;
+  data.sense = 0;
+  data.speed = 0;
+}
+
+struct pidData leftData;
+struct pidData rightData;
+
 void encoderMotor(pid_info* pid, int target) {
   encoderLeftOffset = encoderGet(encoderLeft); //Set offsets so that the encoders don't have to be reset
   encoderRightOffset = encoderGet(encoderRight);
   //variable holding sensor information (encoder)
-  float sense;
-  int lastError = 0;                    //resets the last error
-  int integral = 0;                     //resets the integral value
+
+  rightData.lastError = 0;
+  leftData.lastError = 0;                    //resets the last error
+  rightData.integral = 0;
+  leftData.integral = 0;                     //resets the integral value
   bool run = true;                      //start the PID controller
-  //initialize the error, derivative and resulting speed values
-  int error, derivative, speed;
   int timeout;
+  //initialize the error, derivative and resulting speed values
 
   while(run) {
     timeout = millis() + 10*target/2;
 
-    sense = encoderGet(*sensor_reading); //get encoder readings
-    printf("\nsense%f.1", sense);
+    rightData.sense = encoderGet(encoderRight);
+    leftData.sense = encoderGet(encoderLeft); //get encoder readings
+    //printf("\nsense%f.1", sense);
 
     //calculate the error from target to current readings
-    error = target - sense;
+    rightData.error = target - rightData.sense;
+    leftData.error = target - leftData.sense;
 
-    integral += error;                  //add the error to the integral
+    rightData.integral += rightData.error;
+    leftData.integral += leftData.error;                  //add the error to the integral
     //find the derivative by calculating the difference from the previous two
     //  errors
-    derivative = error - lastError;
+    rightData.derivative = rightData.error - rightData.lastError;
+    leftData.derivative = leftData.error - leftData.lastError;
 
     //disable the integral until it comes into a usable range
-    if(error == 0 || (abs(error) > (127/2))) { integral = 0; }
+    if(leftData.error == 0 || (abs(leftData.error) > (127/2))) { leftData.integral = 0; }
+    if(rightData.error == 0 || (abs(rightData.error) > (127/2))) { rightData.integral = 0; }
 
     //put the whole PID shenanigan together and calculate the speed
-    speed = (pid->p*error) + (pid->i*integral) + (pid->d*derivative);
+    rightData.speed = (pid->p*rightData.error) + (pid->i*rightData.integral) + (pid->d*rightData.derivative);
+    leftData.speed = (pid->p*leftData.error) + (pid->i*leftData.integral) + (pid->d*leftData.derivative);
 
-    chassisSet(speed, speed);        //request the calculated motor speed
+    chassisSet(leftData.speed, rightData.speed);        //request the calculated motor speed
 
     //if the previous two errors were 0, then the robot has probably stopped,
     //  so exit the program
-    if ((error == 0 && lastError == 0) || (int)millis() >= timeout) { run = false; }
+    if (((rightData.error == 0 && rightData.lastError == 0) && (leftData.error == 0 && leftData.lastError == 0)) || (int)millis() >= timeout) { run = false; }
 
     //end of loop, current error becomes the last error for the next run
-    lastError = error;
+    rightData.lastError = rightData.error;
+    leftData.lastError = leftData.error;
     delay(2);
   }
+  Reset(rightData);
+  Reset(leftData);
 }
-
 //calculates the ratio in which the robot moves in proportion to the number of
 //  ticks
 void intRatio(int encoderTicks, int angle) {

@@ -139,12 +139,12 @@ prevaction = action; //Update the previous action
 void align() {
   float requiredMovement = angle * encoderturn; //Calculate encoder ticks required to align straight
 
-  if(angle <= 180) { //Check if the robot should turn left or right
+  /*if(angle <= 180) { //Check if the robot should turn left or right
     encoderMotor(&driveStraightRight, requiredMovement, &encoderRight);
     encoderMotor(&driveStraightLeft, -requiredMovement, &encoderLeft);
   }
   else {
     encoderMotor(&driveStraightRight, -requiredMovement, &encoderRight);
     encoderMotor(&driveStraightLeft, requiredMovement, &encoderLeft);
-  }
+  }*/
 }
