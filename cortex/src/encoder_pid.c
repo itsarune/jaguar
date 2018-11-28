@@ -1,4 +1,5 @@
 #include "encoder_pid.h"        //include relevant header
+#include "tracking.h"
 
 //sets the PID controller values for each instance
 void pidSet(pid_info* pid,
@@ -10,24 +11,37 @@ void pidSet(pid_info* pid,
     pid->motor = motor;         //stores which motor this PID info is relevant to
   }
 
+int encoderLeftOffset;
+int encoderRightOffset;
+
+int getEncoderLeft() {
+  return encoderGet(encoderLeft) - encoderLeftOffset;
+}
+int getEncoderRight() {
+  return encoderGet(encoderRight) - encoderRightOffset;
+}
+
 /*
   This function uses a PID controller using information from the PID structure
   to move the robot based on sensor-readings (typically encocder-ticks)
 */
-void encoderMotor(pid_info* pid, int target, Encoder* sensor_reading) {
-  encoderReset(sensor_reading);         //resets encoder
+void encoderMotor(pid_info* pid, int target) {
+  encoderLeftOffset = encoderGet(encoderLeft); //Set offsets so that the encoders don't have to be reset
+  encoderRightOffset = encoderGet(encoderRight);
   //variable holding sensor information (encoder)
-  int sense;
+  float sense;
   int lastError = 0;                    //resets the last error
   int integral = 0;                     //resets the integral value
   bool run = true;                      //start the PID controller
   //initialize the error, derivative and resulting speed values
   int error, derivative, speed;
+  int timeout;
 
   while(run) {
+    timeout = millis() + 10*target/2;
 
-    sense = encoderGet(sensor_reading); //get encoder readings
-    printf("\nsense%d", sense);
+    sense = encoderGet(*sensor_reading); //get encoder readings
+    printf("\nsense%f.1", sense);
 
     //calculate the error from target to current readings
     error = target - sense;
@@ -47,12 +61,10 @@ void encoderMotor(pid_info* pid, int target, Encoder* sensor_reading) {
 
     //if the previous two errors were 0, then the robot has probably stopped,
     //  so exit the program
-    if (error == 0 && lastError == 0) { run = false; }
+    if ((error == 0 && lastError == 0) || (int)millis() >= timeout) { run = false; }
 
     //end of loop, current error becomes the last error for the next run
     lastError = error;
-
-    printf("%d", error);
     delay(2);
   }
 }
@@ -67,8 +79,8 @@ void intRatio(int encoderTicks, int angle) {
 void encoderTurn(float angle, Encoder* sensor_reading,
     pid_info* pid, pid_info* motor2) {
   //pass relevant information to motors
-  encoderMotor(pid, (angle*ratio), sensor_reading);
+  //encoderMotor(pid, (angle*ratio));
   //negate the angle as the motor will turn the opposite way
   angle *= -1;
-  encoderMotor(motor2, (angle*ratio), sensor_reading);
+  //encoderMotor(motor2, (angle*ratio));
 }
