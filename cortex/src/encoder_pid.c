@@ -30,6 +30,7 @@ struct pidData {
   int lastError;
   int integral;
   int error, derivative, speed;
+  int turnMultiplier;
 } pidData;
 
 void Reset(struct pidData data)
@@ -40,14 +41,19 @@ void Reset(struct pidData data)
   data.lastError = 0;
   data.sense = 0;
   data.speed = 0;
+  data.turnMultiplier = 1;
 }
 
 struct pidData leftData;
 struct pidData rightData;
 
-void encoderMotor(pid_info* pid, int target) {
+void encoderMotor(pid_info* pid, int target, bool forwardLeft, bool forwardRight) {
   encoderLeftOffset = encoderGet(encoderLeft); //Set offsets so that the encoders don't have to be reset
   encoderRightOffset = encoderGet(encoderRight);
+  
+  rightData.turnMultiplier = forwardRight == True ? 1 : -1;
+  leftData.turnMultiplier = forwardLeft == True ? 1 : -1;
+  
   //variable holding sensor information (encoder)
 
   rightData.lastError = 0;
@@ -61,8 +67,8 @@ void encoderMotor(pid_info* pid, int target) {
   while(run) {
     timeout = millis() + 10*target/2;
 
-    rightData.sense = encoderGet(encoderRight);
-    leftData.sense = encoderGet(encoderLeft); //get encoder readings
+    rightData.sense = getEncoderRight();
+    leftData.sense = getEncoderLeft(); //get encoder readings
     //printf("\nsense%f.1", sense);
 
     //calculate the error from target to current readings
@@ -84,7 +90,7 @@ void encoderMotor(pid_info* pid, int target) {
     rightData.speed = (pid->p*rightData.error) + (pid->i*rightData.integral) + (pid->d*rightData.derivative);
     leftData.speed = (pid->p*leftData.error) + (pid->i*leftData.integral) + (pid->d*leftData.derivative);
 
-    chassisSet(leftData.speed, rightData.speed);        //request the calculated motor speed
+    chassisSet(leftData.speed * leftData.turnMultiplier, rightData.speed * rightData.turnMultiplier);        //request the calculated motor speed
 
     //if the previous two errors were 0, then the robot has probably stopped,
     //  so exit the program
