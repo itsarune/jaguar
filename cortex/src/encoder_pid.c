@@ -44,6 +44,32 @@ void Reset(struct pidData data)
   data.turnMultiplier = 1;
 }
 
+ int timeout;
+
+void CalculatePID(struct pidData data)
+{
+    //calculate the error from target to current readings
+    data.error = target - data.sense;
+
+    data.integral += data.error;                  //add the error to the integral
+    //find the derivative by calculating the difference from the previous two
+    //  errors
+    data.derivative = data.error - data.lastError;
+
+    //disable the integral until it comes into a usable range
+    if(data.error == 0 || (abs(data.error) > (127/2))) { data.integral = 0; }
+
+    //put the whole PID shenanigan together and calculate the speed
+    data.speed = (pid->p*data.error) + (pid->i*data.integral) + (pid->d*data.derivative);
+
+    //if the previous two errors were 0, then the robot has probably stopped,
+    //  so exit the program
+    if (((data.error == 0 && data.lastError == 0)) || (int)millis() >= timeout) { return false; }
+
+    //end of loop, current error becomes the last error for the next run
+    data.lastError = data.error;
+}
+
 struct pidData leftData;
 struct pidData rightData;
 
@@ -60,45 +86,21 @@ void encoderMotor(pid_info* pid, int target, bool forwardLeft, bool forwardRight
   leftData.lastError = 0;                    //resets the last error
   rightData.integral = 0;
   leftData.integral = 0;                     //resets the integral value
-  bool run = true;                      //start the PID controller
-  int timeout;
+  bool runRight = true;
+  bool runLeft = true;//start the PID controller
   //initialize the error, derivative and resulting speed values
 
-  while(run) {
+  while(runLeft || runLeft) {   
     timeout = millis() + 10*target/2;
-
+    
     rightData.sense = getEncoderRight();
     leftData.sense = getEncoderLeft(); //get encoder readings
     //printf("\nsense%f.1", sense);
-
-    //calculate the error from target to current readings
-    rightData.error = target - rightData.sense;
-    leftData.error = target - leftData.sense;
-
-    rightData.integral += rightData.error;
-    leftData.integral += leftData.error;                  //add the error to the integral
-    //find the derivative by calculating the difference from the previous two
-    //  errors
-    rightData.derivative = rightData.error - rightData.lastError;
-    leftData.derivative = leftData.error - leftData.lastError;
-
-    //disable the integral until it comes into a usable range
-    if(leftData.error == 0 || (abs(leftData.error) > (127/2))) { leftData.integral = 0; }
-    if(rightData.error == 0 || (abs(rightData.error) > (127/2))) { rightData.integral = 0; }
-
-    //put the whole PID shenanigan together and calculate the speed
-    rightData.speed = (pid->p*rightData.error) + (pid->i*rightData.integral) + (pid->d*rightData.derivative);
-    leftData.speed = (pid->p*leftData.error) + (pid->i*leftData.integral) + (pid->d*leftData.derivative);
-
-    chassisSet(leftData.speed * leftData.turnMultiplier, rightData.speed * rightData.turnMultiplier);        //request the calculated motor speed
-
-    //if the previous two errors were 0, then the robot has probably stopped,
-    //  so exit the program
-    if (((rightData.error == 0 && rightData.lastError == 0) && (leftData.error == 0 && leftData.lastError == 0)) || (int)millis() >= timeout) { run = false; }
-
-    //end of loop, current error becomes the last error for the next run
-    rightData.lastError = rightData.error;
-    leftData.lastError = leftData.error;
+    
+    runRight = CalculatePID(rightData);
+    runLeft = CalculatePID(leftData);
+    
+    chassisSet(leftData.speed * leftData.turnMultiplier, rightData.speed * rightData.turnMultiplier);        //request the calculated motor speed    
     delay(2);
   }
   Reset(rightData);
