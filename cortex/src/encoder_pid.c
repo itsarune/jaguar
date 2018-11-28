@@ -46,7 +46,7 @@ void Reset(struct pidData data)
 
  int timeout;
 
-void CalculatePID(struct pidData data)
+bool CalculatePID(struct pidData data, int target, pid_info* pid)
 {
     //calculate the error from target to current readings
     data.error = target - data.sense;
@@ -68,6 +68,7 @@ void CalculatePID(struct pidData data)
 
     //end of loop, current error becomes the last error for the next run
     data.lastError = data.error;
+    return true;
 }
 
 struct pidData leftData;
@@ -77,8 +78,8 @@ void encoderMotor(pid_info* pid, int target, bool forwardLeft, bool forwardRight
   encoderLeftOffset = encoderGet(encoderLeft); //Set offsets so that the encoders don't have to be reset
   encoderRightOffset = encoderGet(encoderRight);
   
-  rightData.turnMultiplier = forwardRight == True ? 1 : -1;
-  leftData.turnMultiplier = forwardLeft == True ? 1 : -1;
+  rightData.turnMultiplier = forwardRight == true ? 1 : -1;
+  leftData.turnMultiplier = forwardLeft == true ? 1 : -1;
   
   //variable holding sensor information (encoder)
 
@@ -97,8 +98,8 @@ void encoderMotor(pid_info* pid, int target, bool forwardLeft, bool forwardRight
     leftData.sense = getEncoderLeft(); //get encoder readings
     //printf("\nsense%f.1", sense);
     
-    runRight = CalculatePID(rightData);
-    runLeft = CalculatePID(leftData);
+    if(runRight) {runRight = CalculatePID(rightData, target, pid);}
+    if(runLeft) {runLeft = CalculatePID(leftData, target, pid);}
     
     chassisSet(leftData.speed * leftData.turnMultiplier, rightData.speed * rightData.turnMultiplier);        //request the calculated motor speed    
     delay(2);
