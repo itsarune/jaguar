@@ -78,15 +78,14 @@ void encoderMotor(pid_info* pid, int target, bool forwardLeft, bool forwardRight
   encoderLeftOffset = encoderGet(encoderLeft); //Set offsets so that the encoders don't have to be reset
   encoderRightOffset = encoderGet(encoderRight);
   
+  Reset(rightData);
+  Reset(leftData);
+
   rightData.turnMultiplier = forwardRight == true ? 1 : -1;
   leftData.turnMultiplier = forwardLeft == true ? 1 : -1;
   
   //variable holding sensor information (encoder)
-
-  rightData.lastError = 0;
-  leftData.lastError = 0;                    //resets the last error
-  rightData.integral = 0;
-  leftData.integral = 0;                     //resets the integral value
+  //resets the integral value
   bool runRight = true;
   bool runLeft = true;//start the PID controller
   //initialize the error, derivative and resulting speed values
@@ -101,11 +100,10 @@ void encoderMotor(pid_info* pid, int target, bool forwardLeft, bool forwardRight
     if(runRight) {runRight = CalculatePID(rightData, target, pid);}
     if(runLeft) {runLeft = CalculatePID(leftData, target, pid);}
     
-    chassisSet(leftData.speed * leftData.turnMultiplier, rightData.speed * rightData.turnMultiplier);        //request the calculated motor speed    
+    chassisSet(leftData.speed * leftData.turnMultiplier, rightData.speed * rightData.turnMultiplier);        //request the calculated motor speed
+    tracking();    
     delay(2);
   }
-  Reset(rightData);
-  Reset(leftData);
 }
 //calculates the ratio in which the robot moves in proportion to the number of
 //  ticks
