@@ -49,7 +49,7 @@ void Reset(struct pidData data)
 bool CalculatePID(struct pidData data, int target, pid_info* pid)
 {
     //calculate the error from target to current readings
-    data.error = target - data.sense;
+    data.error = target*data.turnMultiplier - data.sense;
 
     data.integral += data.error;                  //add the error to the integral
     //find the derivative by calculating the difference from the previous two
