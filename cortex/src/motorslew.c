@@ -4,7 +4,7 @@
 //rate in which the motor steps
 #define MOTOR_SLEW_RATE  10
 //delay to request motor speed
-#define MOTOR_TASK_DELAY 10
+#define MOTOR_TASK_DELAY 20
 
 //requested motor speeds for all motors
 int motor_req[11];
