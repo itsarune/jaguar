@@ -50,7 +50,7 @@ void operatorControl() {
 			run = true;
 		}
 		if (run) {
-			print("start");
+			printf("start");
 			encoderMotor(&driveStraightRight, 500, &encoderRight);
 			//printf("printing");
 			//count = encoderGet(encoderRight);

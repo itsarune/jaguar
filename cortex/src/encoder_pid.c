@@ -24,9 +24,9 @@ void encoderMotor(pid_info* pid, int target, Encoder* sensor_reading) {
   //initialize the error, derivative and resulting speed values
   int error, derivative, speed;
   int timeout;
-
+  timeout = millis() + 10*target/2;
   while(run) {
-    timeout = millis() + 10*target/2;
+    
 
     sense = encoderGet(*sensor_reading); //get encoder readings
     printf("\nsense%f.1", sense);
