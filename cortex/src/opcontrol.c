@@ -56,6 +56,7 @@ void operatorControl() {
 			run = true;
 		}
 		if (run) {
+			encoderMotor(&driveStraightRight, 500, true, true);
 			//printf("printing");
 			//count = encoderGet(encoderRight);
 			//printf("\nthe encoder value%d, %d", count, encoderGet(encoderLeft));
@@ -115,7 +116,6 @@ void operatorControl() {
 				turn = 0;
 			}
 		}
-		printf("test");
 		tracking();
 	}
 

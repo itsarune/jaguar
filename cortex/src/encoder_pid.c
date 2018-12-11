@@ -64,7 +64,7 @@ bool CalculatePID(struct pidData data, int target, pid_info* pid)
 
     //if the previous two errors were 0, then the robot has probably stopped,
     //  so exit the program
-    if (((data.error == 0 && data.lastError == 0)) || (int)millis() >= timeout) { return false; }
+    if (((data.error == 0 && data.lastError == 0)) || (int)millis() >= timeout) { data.speed = 0; return false; }
 
     //end of loop, current error becomes the last error for the next run
     data.lastError = data.error;
@@ -92,14 +92,17 @@ void encoderMotor(pid_info* pid, int target, bool forwardLeft, bool forwardRight
 
   while(runLeft || runLeft) {   
     timeout = millis() + 10*target/2;
-    
+
     rightData.sense = getEncoderRight();
     leftData.sense = getEncoderLeft(); //get encoder readings
     //printf("\nsense%f.1", sense);
     
     if(runRight) {runRight = CalculatePID(rightData, target, pid);}
-    if(runLeft) {runLeft = CalculatePID(leftData, target, pid);}
+    if(runLeft) {runLeft = CalculatePID(leftData, target, pid);} 
     
+    printf("Right: %d\n", rightData.error);
+    printf("Left: %d\n", leftData.error);
+
     chassisSet(leftData.speed * leftData.turnMultiplier, rightData.speed * rightData.turnMultiplier);        //request the calculated motor speed
     tracking();    
     delay(2);
