@@ -43,15 +43,18 @@ void operatorControl() {
 	int power = 0;
 	int turn = 0;                               				//sets the power of the motor
 	bool run = false;
+	printf("start");
+	encoderMotor(&driveStraightRight, 500, &encoderRight);
 	while(1) {
 		printf("running, you bastard");
 		if (joystickGetDigital(1, 7, JOY_LEFT))
 		{
 			run = true;
 		}
+		motorReq(6, 120);
+		delay(1000);
+		motorReq(6, 0);
 		if (run) {
-			printf("start");
-			encoderMotor(&driveStraightRight, 500, &encoderRight);
 			//printf("printing");
 			//count = encoderGet(encoderRight);
 			//printf("\nthe encoder value%d, %d", count, encoderGet(encoderLeft));
@@ -74,7 +77,7 @@ void operatorControl() {
 				turn = 0;
 			}
 		}
-		print("test");
+		
 	}
 
 }
