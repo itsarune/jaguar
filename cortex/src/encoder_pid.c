@@ -24,7 +24,7 @@ void encoderMotor(pid_info* pid, int target, Encoder* sensor_reading) {
   //initialize the error, derivative and resulting speed values
   int error, derivative, speed;
   int timeout;
-  timeout = 1000+millis(); // millis() + 10*target/2;
+  timeout = millis() + 10*target/2;
   while(run) {
     
 

@@ -44,6 +44,7 @@ void operatorControl() {
 	int turn = 0;                               				//sets the power of the motor
 	bool run = false;
 	printf("start");
+	
 	encoderMotor(&driveStraightRight, 500, &encoderRight);
 	while(1) {
 		printf("running, you bastard");
@@ -51,9 +52,6 @@ void operatorControl() {
 		{
 			run = true;
 		}
-		motorReq(6, 120);
-		delay(1000);
-		motorReq(6, 0);
 		if (run) {
 			//printf("printing");
 			//count = encoderGet(encoderRight);

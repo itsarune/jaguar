@@ -53,8 +53,6 @@ void motorslewing(void * parameter) {              //motor slew function
           //required speed set, no longer needs to be slewed
           motor_slew[i] = false;
         }
-      } else {
-        motor_speed[i] = 0;
       }
       motorSet(i, motor_speed[i]);                 //finally set the motorspeed
     }
