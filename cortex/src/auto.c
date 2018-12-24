@@ -28,8 +28,12 @@
  * so, the robot will await a switch to another mode or disable/enable cycle.
  */
 void autonomous() {
-  delay(5000);
+  while(true) {
     printf("we're doing autonomous now");
+    delay(10);
+    if (millis() == 15000) 
+      break;
+  }
     //create the slew-rate task
 
     //ask the right motor to move forward a certain amount of ticks

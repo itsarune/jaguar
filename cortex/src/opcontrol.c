@@ -31,7 +31,8 @@
  *
  * This task should never exit; it should end with some kind of infinite loop, even if empty.
  */
-void operatorControl() {
+
+void operatorControl(void * parameter) {
 	encoderReset(encoderRight);
 	taskCreate(motorslewing, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_DEFAULT);
 	//_DRONE_CONTROL_
@@ -44,10 +45,11 @@ void operatorControl() {
 	int turn = 0;                               				//sets the power of the motor
 	bool run = false;
 	printf("start");
-	
+
 	encoderMotor(&driveStraightRight, 500, &encoderRight);
 	while(1) {
-		printf("running, you bastard");
+		printf("running, you bastard\n");
+		lcdPrint(uart1, 1, "running you bastard!");
 		if (joystickGetDigital(1, 7, JOY_LEFT))
 		{
 			run = true;
@@ -75,7 +77,7 @@ void operatorControl() {
 				turn = 0;
 			}
 		}
-		
+
 	}
 
 }

@@ -50,4 +50,8 @@ void initialize() {
   pidSet(&driveStraightLeft, 0.5, 0, 0, leftMotor1);
   lcdInit(uart1);
   lcdClear(uart1);
+  /*initJINX(stdout);
+  delay(100);
+  taskCreate(JINXRun, TASK_DEFAULT_STACK_SIZE, NULL, (TASK_PRIORITY_DEFAULT));
+  delay(100) */
 }

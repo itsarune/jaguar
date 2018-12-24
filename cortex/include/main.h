@@ -92,7 +92,7 @@ void initialize();
  *
  * This task should never exit; it should end with some kind of infinite loop, even if empty.
  */
-void operatorControl();
+void operatorControl(void * parameter);
 
 //declare encoders
 Encoder encoderRight;
