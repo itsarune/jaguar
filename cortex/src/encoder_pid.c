@@ -33,15 +33,15 @@ struct pidData {
   int turnMultiplier;
 } pidData;
 
-void Reset(struct pidData data)
+void Reset(struct pidData* data)
 {
-  data.derivative = 0;
-  data.error = 0;
-  data.integral = 0;
-  data.lastError = 0;
-  data.sense = 0;
-  data.speed = 0;
-  data.turnMultiplier = 1;
+  data->derivative = 0;
+  data->error = 0;
+  data->integral = 0;
+  data->lastError = 0;
+  data->sense = 0;
+  data->speed = 0;
+  data->turnMultiplier = 1;
 }
 
  int timeout;
@@ -50,7 +50,7 @@ bool CalculatePID(struct pidData* data, int target, pid_info* pid)
 {
     //calculate the error from target to current readings
     data->error = target*data->turnMultiplier - data->sense;
-    printf("\nfinding the data error: %d, %f", data->error, pid->p);
+    //printf("\nfinding the data error: %d, %f", data->error, pid->p);
 
     data->integral += data->error;                  //add the error to the integral
     //find the derivative by calculating the difference from the previous two
@@ -75,15 +75,15 @@ bool CalculatePID(struct pidData* data, int target, pid_info* pid)
 struct pidData leftData;
 struct pidData rightData;
 
-void encoderMotor(pid_info* pid, int target, bool forwardLeft, bool forwardRight) {
+void encoderMotor(pid_info* pid, pid_info* pid_other, int target, bool forwardLeft, bool forwardRight) {
   encoderLeftOffset = encoderGet(encoderLeft); //Set offsets so that the encoders don't have to be reset
   encoderRightOffset = encoderGet(encoderRight);
 
   timeout = 10*target/2 + millis();
-  printf("returned timeout%d", timeout);
+  //printf("returned timeout%d", timeout);
 
-  Reset(rightData);
-  Reset(leftData);
+  Reset(&rightData);
+  Reset(&leftData);
 
   rightData.turnMultiplier = forwardRight == true ? 1 : -1;
   leftData.turnMultiplier = forwardLeft == true ? 1 : -1;
@@ -95,16 +95,17 @@ void encoderMotor(pid_info* pid, int target, bool forwardLeft, bool forwardRight
   //initialize the error, derivative and resulting speed values
 
   while(runRight || runLeft) {
-    printf("PID data: %f, target: %d", pid->p, target);
+    //printf("PID data: %f, target: %d", pid->p, target);
     rightData.sense = getEncoderRight();
     leftData.sense = getEncoderLeft(); //get encoder readings
     //printf("\nsense%f.1", sense);
 
     if(runRight) {runRight = CalculatePID(&rightData, target, pid);}
-    if(runLeft) {runLeft = CalculatePID(&leftData, target, pid);}
-
-    printf("Right: %d,%d\n", rightData.error, rightData.speed);
-    printf("Left: %d,%d\n", leftData.error, leftData.speed);
+    if(runLeft) {runLeft = CalculatePID(&leftData, target, pid_other);}
+    if (millis()%20 <= 3) {
+      printf("Right: %d,%d\n", rightData.error, rightData.speed);
+      printf("Left: %d,%d\n", leftData.error, leftData.speed);
+    }
 
     chassisSet(leftData.speed * leftData.turnMultiplier, rightData.speed * rightData.turnMultiplier);        //request the calculated motor speed
     tracking();

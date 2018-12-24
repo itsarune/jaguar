@@ -9,6 +9,7 @@
 #define leftMotor1  2
 #define rightMotor1 3
 #define leftMotor2  4
+#define leftMotor3  6
 #define rightMotor2 5
 
 //set speed of drive system

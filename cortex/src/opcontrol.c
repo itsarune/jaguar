@@ -50,9 +50,9 @@ void operatorControl() {
 	float driftMultiplierRight = 1;
 	float driftMultiplierLeft = 1;*/
 	printf("start");
+	printf("beginning pid");
+	encoderMotor(&driveStraightRight, &driveStraightLeft, 500, true, true);
 	while(1) {
-		printf("beginning pid");
-		encoderMotor(&driveStraightRight, 500, true, true);
 		if (joystickGetDigital(1, 7, JOY_LEFT))
 		{
 			run = true;
