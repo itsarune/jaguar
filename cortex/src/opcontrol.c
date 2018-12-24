@@ -45,11 +45,10 @@ void operatorControl(void * parameter) {
 	int turn = 0;                               				//sets the power of the motor
 	bool run = false;
 	printf("start");
-
 	encoderMotor(&driveStraightRight, 500, &encoderRight);
 	while(1) {
 		printf("running, you bastard\n");
-		lcdPrint(uart1, 1, "running you bastard!");
+		//lcdPrint(uart1, 1, "running you bastard!");
 		if (joystickGetDigital(1, 7, JOY_LEFT))
 		{
 			run = true;

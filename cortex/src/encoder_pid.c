@@ -25,6 +25,7 @@ void encoderMotor(pid_info* pid, int target, Encoder* sensor_reading) {
   int error, derivative, speed;
   int timeout;
   timeout = millis() + 10*target/2;
+  printf("\nTimeout: %d", timeout);
   while(run) {
 
 
@@ -54,9 +55,10 @@ void encoderMotor(pid_info* pid, int target, Encoder* sensor_reading) {
 
     //end of loop, current error becomes the last error for the next run
     lastError = error;
-    if (millis()%20 == 0) {
-      printf("sensor value: %f.1", sense);
+    if (millis()%15 < 8) {
+      printf("\nsensor value: 1.%f", sense);
     }
+    //printf("\nRunning the encoder function.");
     delay(5);
   }
 }
