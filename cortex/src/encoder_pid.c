@@ -46,28 +46,29 @@ void Reset(struct pidData data)
 
  int timeout;
 
-bool CalculatePID(struct pidData data, int target, pid_info* pid)
+bool CalculatePID(struct pidData* data, int target, pid_info* pid)
 {
     //calculate the error from target to current readings
-    data.error = target*data.turnMultiplier - data.sense;
+    data->error = target*data->turnMultiplier - data->sense;
+    printf("\nfinding the data error: %d, %f", data->error, pid->p);
 
-    data.integral += data.error;                  //add the error to the integral
+    data->integral += data->error;                  //add the error to the integral
     //find the derivative by calculating the difference from the previous two
     //  errors
-    data.derivative = data.error - data.lastError;
+    data->derivative = data->error - data->lastError;
 
     //disable the integral until it comes into a usable range
-    if(data.error == 0 || (abs(data.error) > (127/2))) { data.integral = 0; }
+    if(data->error == 0 || (abs(data->error) > (127/2))) { data->integral = 0; }
 
     //put the whole PID shenanigan together and calculate the speed
-    data.speed = (pid->p*data.error) + (pid->i*data.integral) + (pid->d*data.derivative);
+    data->speed = (pid->p*data->error) + (pid->i*data->integral) + (pid->d*data->derivative);
 
     //if the previous two errors were 0, then the robot has probably stopped,
     //  so exit the program
-    if (((data.error == 0 && data.lastError == 0)) || (int)millis() >= timeout) { data.speed = 0; return false; }
+    if (((data->error == 0 && data->lastError == 0)) || (int)millis() >= timeout) { data->speed = 0; return false; }
 
     //end of loop, current error becomes the last error for the next run
-    data.lastError = data.error;
+    data->lastError = data->error;
     return true;
 }
 
@@ -77,34 +78,36 @@ struct pidData rightData;
 void encoderMotor(pid_info* pid, int target, bool forwardLeft, bool forwardRight) {
   encoderLeftOffset = encoderGet(encoderLeft); //Set offsets so that the encoders don't have to be reset
   encoderRightOffset = encoderGet(encoderRight);
-  
+
+  timeout = 10*target/2 + millis();
+  printf("returned timeout%d", timeout);
+
   Reset(rightData);
   Reset(leftData);
 
   rightData.turnMultiplier = forwardRight == true ? 1 : -1;
   leftData.turnMultiplier = forwardLeft == true ? 1 : -1;
-  
+
   //variable holding sensor information (encoder)
   //resets the integral value
   bool runRight = true;
   bool runLeft = true;//start the PID controller
   //initialize the error, derivative and resulting speed values
 
-  while(runLeft || runLeft) {   
-    timeout = millis() + 10*target/2;
-
+  while(runRight || runLeft) {
+    printf("PID data: %f, target: %d", pid->p, target);
     rightData.sense = getEncoderRight();
     leftData.sense = getEncoderLeft(); //get encoder readings
     //printf("\nsense%f.1", sense);
-    
-    if(runRight) {runRight = CalculatePID(rightData, target, pid);}
-    if(runLeft) {runLeft = CalculatePID(leftData, target, pid);} 
-    
-    printf("Right: %d\n", rightData.error);
-    printf("Left: %d\n", leftData.error);
+
+    if(runRight) {runRight = CalculatePID(&rightData, target, pid);}
+    if(runLeft) {runLeft = CalculatePID(&leftData, target, pid);}
+
+    printf("Right: %d,%d\n", rightData.error, rightData.speed);
+    printf("Left: %d,%d\n", leftData.error, leftData.speed);
 
     chassisSet(leftData.speed * leftData.turnMultiplier, rightData.speed * rightData.turnMultiplier);        //request the calculated motor speed
-    tracking();    
+    tracking();
     delay(2);
   }
 }

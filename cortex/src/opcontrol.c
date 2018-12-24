@@ -51,12 +51,13 @@ void operatorControl() {
 	float driftMultiplierLeft = 1;*/
 	printf("start");
 	while(1) {
+		printf("beginning pid");
+		encoderMotor(&driveStraightRight, 500, true, true);
 		if (joystickGetDigital(1, 7, JOY_LEFT))
 		{
 			run = true;
 		}
 		if (run) {
-			encoderMotor(&driveStraightRight, 500, true, true);
 			//printf("printing");
 			//count = encoderGet(encoderRight);
 			//printf("\nthe encoder value%d, %d", count, encoderGet(encoderLeft));
@@ -89,7 +90,7 @@ void operatorControl() {
 					power = 0;
 					turn = joystickGetAnalog(1, 1);
 				}
-			}  
+			}
 			else {
 				power = 0;
 				turn = 0;
