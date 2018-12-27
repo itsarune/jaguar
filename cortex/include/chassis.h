@@ -6,12 +6,12 @@
 #include "main.h"
 #include "motorslew.h"
 
-#define leftMotor1  2
-#define rightMotor1 3
-#define leftMotor2  4
-#define leftMotor3  6
-#define rightMotor2 5
-#define rightMotor3 7
+#define leftMotor1  7
+#define rightMotor1 2
+#define leftMotor2  8
+#define leftMotor3  9
+#define rightMotor2 3
+#define rightMotor3 4
 
 //set speed of drive system
 void chassisSet(int left, int right); //sets the speed of the drive system

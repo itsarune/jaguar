@@ -45,13 +45,25 @@ void operatorControl() {
 	int power = 0;
 	int turn = 0;                               				//sets the power of the motor
 	bool run = false;
+	int intakeRun = 0;
+	int intakeSpeed = 0;
+	int intakeMultiplier = 0;
 	/*int prevEncoderLeft = 0;
 	int prevEncoderRight = 0;
 	float driftMultiplierRight = 1;
 	float driftMultiplierLeft = 1;*/
 	printf("start");
 	printf("beginning pid");
-	//encoderMotor(&driveStraightRight, &driveStraightLeft, 500, true, true);
+	while (1) {
+		if (joystickGetDigital(1,7, JOY_LEFT)) {
+			motorReq(5, 0);
+			break;
+		}
+		printf("ready?\n");
+		motorReq(5, -100);
+		delay(20);
+	}
+	encoderMotor(&driveStraightRight, &driveStraightLeft, 650, true, true);
 	while(1) {
 		if (joystickGetDigital(1, 7, JOY_LEFT))
 		{
@@ -105,11 +117,33 @@ void operatorControl() {
 				}
 
 				prevEncoderLeft = encoderGet(encoderLeft);
-				prevEncoderRight = encoderGet(encoderRight);
+				prevEnco(derRight = encoderGet(encoderRight);
 			}*/
 
 			chassisSet((power+turn), (power-turn));
 			delay(2);
+			if (joystickGetDigital(1, 8, JOY_LEFT)) {
+				if (intakeRun != 0)
+					intakeRun = 0;
+				else {
+					intakeRun = 1;
+				}
+			}
+			if (joystickGetDigital(1, 8, JOY_RIGHT)) {
+				if (intakeRun != 0) {
+					intakeRun = 0;
+				} else {
+					intakeRun = 2;
+				}
+			}
+			if (intakeRun!=0) {
+				intakeMultiplier = (intakeRun == 1) ? 1 : -1;
+				printf("intake multiplier, %d , %d\n", intakeMultiplier, intakeRun);
+				intakeSpeed = 100 * intakeMultiplier;
+				motorReq(5, intakeSpeed);
+			} else if(intakeRun == 0) {
+				motorReq(5,0);
+			}
 			if (joystickGetDigital(1, 7, JOY_RIGHT))
 			{
 				run = false;
