@@ -12,6 +12,7 @@
 #define leftMotor3  9
 #define rightMotor2 3
 #define rightMotor3 4
+#define rollerIntake 5
 
 //set speed of drive system
 void chassisSet(int left, int right); //sets the speed of the drive system

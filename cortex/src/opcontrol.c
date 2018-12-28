@@ -56,11 +56,11 @@ void operatorControl() {
 	printf("beginning pid");
 	while (1) {
 		if (joystickGetDigital(1,7, JOY_LEFT)) {
-			motorReq(5, 0);
+			motorReq(rollerIntake, 0);
 			break;
 		}
 		printf("ready?\n");
-		motorReq(5, -100);
+		motorReq(rollerIntake, -100);
 		delay(20);
 	}
 	encoderMotor(&driveStraightRight, &driveStraightLeft, 650, true, true);
