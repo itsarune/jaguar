@@ -41,20 +41,18 @@ void operatorControl() {
 	//this variable ensures that each movement was meant to occur rather
 	//than a roaming joystick
 	int joythresh = 10;
-	//int turnJoy = 50;
-	int power = 0;
-	int turn = 0;                               				//sets the power of the motor
+	//int turnJoy = 50;                           				//sets the power of the motor
 	bool run = false;
-	int intakeRun = 0;
-	int intakeSpeed = 0;
-	int intakeMultiplier = 0;
+	int intakeSpeed = 80;
+	float rightSpeed = 0;
+	float leftSpeed = 0;
 	/*int prevEncoderLeft = 0;
 	int prevEncoderRight = 0;
 	float driftMultiplierRight = 1;
 	float driftMultiplierLeft = 1;*/
 	printf("start");
 	printf("beginning pid");
-	while (1) {
+	/*while (1) {
 		if (joystickGetDigital(1,7, JOY_LEFT)) {
 			motorReq(rollerIntake, 0);
 			break;
@@ -63,7 +61,7 @@ void operatorControl() {
 		motorReq(rollerIntake, -100);
 		delay(20);
 	}
-	encoderMotor(&driveStraightRight, &driveStraightLeft, 650, true, true);
+	encoderMotor(&driveStraightRight, &driveStraightLeft, 650, true, true);*/
 	while(1) {
 		if (joystickGetDigital(1, 7, JOY_LEFT))
 		{
@@ -73,82 +71,39 @@ void operatorControl() {
 			//printf("printing");
 			//count = encoderGet(encoderRight);
 			//printf("\nthe encoder value%d, %d", count, encoderGet(encoderLeft));
-			if ((abs(joystickGetAnalog(1, 3)) > joythresh || abs(joystickGetAnalog(1, 4)) > joythresh) && (joystickGetDigital(1, 5, JOY_UP) || joystickGetDigital(1, 6, JOY_UP))) {
-				if(abs(joystickGetAnalog(1, 3)) >= abs(joystickGetAnalog(1,4))) {
-					power = joystickGetAnalog(1, 3) / 7;
-					turn = 0;
-				}
-				else {
-					power = 0;
-					turn = joystickGetAnalog(1, 4) / 7;
-				}
+
+			if (abs(joystickGetAnalog(1, 3)) > joythresh){
+				leftSpeed = joystickGetAnalog(1,3);
 			}
-			else if (abs(joystickGetAnalog(1, 3)) > joythresh || abs(joystickGetAnalog(1, 4)) > joythresh) {
-				if(abs(joystickGetAnalog(1, 3)) >= abs(joystickGetAnalog(1,4))) {
-					power = joystickGetAnalog(1, 3) / 4;
-					turn = 0;
-				}
-				else {
-					power = 0;
-					turn = joystickGetAnalog(1, 4) / 4;
-				}
+			if (abs(joystickGetAnalog(1, 2)) > joythresh){
+				rightSpeed = joystickGetAnalog(1, 2);
 			}
-			else if (abs(joystickGetAnalog(1, 1)) > joythresh || abs(joystickGetAnalog(1, 2)) > joythresh) {
-				if(abs(joystickGetAnalog(1, 2)) >= abs(joystickGetAnalog(1,1))) {
-					power = joystickGetAnalog(1, 2);
-					turn = 0;
-				}
-				else {
-					power = 0;
-					turn = joystickGetAnalog(1, 1);
-				}
+			if (abs(joystickGetAnalog(1, 2)) < joythresh && abs(joystickGetAnalog(1, 3)) < joythresh){
+				rightSpeed = 0; leftSpeed = 0;
+			}
+			if (joystickGetDigital(1, 5, JOY_UP) || joystickGetDigital(1, 6, JOY_UP))
+			{
+				leftSpeed /= 3;
+				rightSpeed /=3;
+			}
+
+			chassisSet(leftSpeed, rightSpeed);
+			delay(2);
+			if (joystickGetDigital(1, 5, JOY_DOWN)) {
+				motorReq(rollerIntake, -intakeSpeed);
+			}
+			else if(joystickGetDigital(1, 6, JOY_DOWN)) {
+				motorReq(rollerIntake, intakeSpeed);
 			}
 			else {
-				power = 0;
-				turn = 0;
+				motorReq(rollerIntake, 0);
 			}
 
-			/*if(abs(encoderGet(encoderLeft) - prevEncoderLeft) != abs(encoderGet(encoderRight) - prevEncoderRight)) {
-				driftMultiplierLeft = 1;
-				driftMultiplierRight = abs(encoderGet(encoderLeft) - prevEncoderLeft) / abs(encoderGet(encoderRight) - prevEncoderRight);
-				if(driftMultiplierRight > 1) {
-					driftMultiplierRight = 1;
-					driftMultiplierLeft = abs(encoderGet(encoderRight) - prevEncoderRight) / abs(encoderGet(encoderLeft) - prevEncoderLeft);
-				}
-
-				prevEncoderLeft = encoderGet(encoderLeft);
-				prevEnco(derRight = encoderGet(encoderRight);
-			}*/
-
-			chassisSet((power+turn), (power-turn));
-			delay(2);
-			if (joystickGetDigital(1, 8, JOY_LEFT)) {
-				if (intakeRun != 0)
-					intakeRun = 0;
-				else {
-					intakeRun = 1;
-				}
-			}
-			if (joystickGetDigital(1, 8, JOY_RIGHT)) {
-				if (intakeRun != 0) {
-					intakeRun = 0;
-				} else {
-					intakeRun = 2;
-				}
-			}
-			if (intakeRun!=0) {
-				intakeMultiplier = (intakeRun == 1) ? 1 : -1;
-				printf("intake multiplier, %d , %d\n", intakeMultiplier, intakeRun);
-				intakeSpeed = 100 * intakeMultiplier;
-				motorReq(5, intakeSpeed);
-			} else if(intakeRun == 0) {
-				motorReq(5,0);
-			}
 			if (joystickGetDigital(1, 7, JOY_RIGHT))
 			{
 				run = false;
-				power = 0;
-				turn = 0;
+				rightSpeed = 0;
+				leftSpeed = 0;
 			}
 		}
 		tracking();
