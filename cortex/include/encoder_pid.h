@@ -28,7 +28,7 @@ int ratio;
 
 */
 
-void encoderMotor(pid_info* pid, pid_info* pid_other, int target, bool forwardLeft, bool forwardRight);
+void encoderMotor(pid_info* pid, pid_info* pid_other, int leftTarget, int rightTarget, bool forwardLeft, bool forwardRight);
 /*
   Uses the quad encoder and PID controller to reach the PID target
 */

@@ -33,6 +33,8 @@
  * This task should never exit; it should end with some kind of infinite loop, even if empty.
  */
 
+const float encoderConstant = 0.1;
+
 void operatorControl() {
 	encoderReset(encoderRight);
 	taskCreate(motorslewing, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_DEFAULT);
@@ -87,7 +89,11 @@ void operatorControl() {
 				rightSpeed /=3;
 			}
 
-			chassisSet(leftSpeed, rightSpeed);
+			float leftMove= leftSpeed * encoderConstant;
+			float rightMove = rightSpeed * encoderConstant;
+
+			//chassisSet(leftSpeed, rightSpeed);
+			encoderMotor(&driveStraightRight, &driveStraightLeft, leftMove, rightMove, true, true);
 			delay(2);
 			if (joystickGetDigital(1, 5, JOY_DOWN)) {
 				motorReq(rollerIntake, -intakeSpeed);
