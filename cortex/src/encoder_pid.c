@@ -77,6 +77,8 @@ struct pidData rightData;
 
 void encoderMotor(pid_info* pid, pid_info* pid_other, int target, bool forwardLeft, bool forwardRight) {
   encoderLeftOffset = encoderGet(encoderLeft); //Set offsets so that the encoders don't have to be reset
+  printf("john%d\n", encoderLeftOffset);
+  printf("otherjohn%d", encoderGet(encoderLeft));
   encoderRightOffset = encoderGet(encoderRight);
 
   timeout = 10*target/2 + millis();
@@ -102,9 +104,9 @@ void encoderMotor(pid_info* pid, pid_info* pid_other, int target, bool forwardLe
 
     if(runRight) {runRight = CalculatePID(&rightData, target, pid);}
     if(runLeft) {runLeft = CalculatePID(&leftData, target, pid_other);}
-    if (millis()%20 <= 3) {
+    if (millis()%15 <= 2) {
       printf("Right: %d,%d\n", rightData.error, rightData.speed);
-      printf("Left: %d,%d\n", leftData.error, leftData.speed);
+      printf("Left: %d,%d, %d, %d\n", leftData.error, leftData.speed, leftData.sense, encoderLeftOffset);
     }
 
     chassisSet(leftData.speed * leftData.turnMultiplier, rightData.speed * rightData.turnMultiplier);        //request the calculated motor speed
