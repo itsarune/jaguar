@@ -12,6 +12,14 @@ typedef struct pid {
   double p, i, d, motor;
 
 } pid_info;
+
+typedef struct pidData {
+  float sense;
+  int lastError;
+  int integral;
+  int error, derivative, speed;
+  int turnMultiplier;
+} pidData;
 /*
   Stores the PID information
 */
@@ -21,6 +29,10 @@ pid_info driveStraightRight;
 pid_info driveStraightLeft;
 pid_info driveTurnRight;
 pid_info driveTurnLeft;
+pidData rightData;
+pidData leftData;
+
+bool CalculatePID(pidData* data, int target, pid_info* pid);
 
 int ratio;
 /*
@@ -39,16 +51,14 @@ void pidSet(pid_info* pid,
 /*
   Sets PID information
 */
-
-void intRatio(int encoderTicks, int angle);
-/*
-  Initializes the ratio for encoder-based turns
-*/
-
-void encoderTurn(float angle, Encoder* sensor_reading,
-    pid_info* pid, pid_info* motor2);
 /*
   Turn the robot to specific angles
 */
+
+void Reset(pidData* data);
+
+int timeout;
+int encoderLeftOffset;
+int encoderRightOffset;
 
 #endif

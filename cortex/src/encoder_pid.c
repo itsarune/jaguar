@@ -9,32 +9,20 @@ void pidSet(pid_info* pid,
     pid->i = i;                 //sets the integral value
     pid->d = d;                 //sets the derivative value
     pid->motor = motor;         //stores which motor this PID info is relevant to
-  }
-
-int encoderLeftOffset;
-int encoderRightOffset;
-
-int getEncoderLeft() {
+}
+/*int getEncoderLeft() {
   return encoderGet(encoderLeft) - encoderLeftOffset;
 }
 int getEncoderRight() {
   return encoderGet(encoderRight) - encoderRightOffset;
-}
+}*/
 
 /*
   This function uses a PID controller using information from the PID structure
   to move the robot based on sensor-readings (typically encocder-ticks)
 */
-struct pidData {
-  float sense;
-  int lastError;
-  int integral;
-  int error, derivative, speed;
-  int turnMultiplier;
-} pidData;
 
-void Reset(struct pidData* data)
-{
+void Reset(pidData* data) {
   data->derivative = 0;
   data->error = 0;
   data->integral = 0;
@@ -44,13 +32,11 @@ void Reset(struct pidData* data)
   data->turnMultiplier = 1;
 }
 
- int timeout;
-
-bool CalculatePID(struct pidData* data, int target, pid_info* pid)
+bool CalculatePID(pidData* data, int target, pid_info* pid)
 {
     //calculate the error from target to current readings
     data->error = target*data->turnMultiplier - data->sense;
-    //printf("\nfinding the data error: %d, %f", data->error, pid->p);
+    //printf("\nfinding the data error: %d, %f", data->error, data->sense);
 
     data->integral += data->error;                  //add the error to the integral
     //find the derivative by calculating the difference from the previous two
@@ -71,9 +57,6 @@ bool CalculatePID(struct pidData* data, int target, pid_info* pid)
     data->lastError = data->error;
     return true;
 }
-
-struct pidData leftData;
-struct pidData rightData;
 
 void encoderMotor(pid_info* pid, pid_info* pid_other, int target, bool forwardLeft, bool forwardRight) {
   encoderLeftOffset = encoderGet(encoderLeft); //Set offsets so that the encoders don't have to be reset
@@ -98,9 +81,9 @@ void encoderMotor(pid_info* pid, pid_info* pid_other, int target, bool forwardLe
 
   while(runRight || runLeft) {
     //printf("PID data: %f, target: %d", pid->p, target);
-    rightData.sense = getEncoderRight();
-    leftData.sense = getEncoderLeft(); //get encoder readings
-    //printf("\nsense%f.1", sense);
+    rightData.sense = encoderGet(encoderRight) - encoderRightOffset;
+    leftData.sense = encoderGet(encoderLeft) - encoderLeftOffset; //get encoder readings
+    printf("\nsense%d, %d.1", rightData.sense, leftData.sense);
 
     if(runRight) {runRight = CalculatePID(&rightData, target, pid);}
     if(runLeft) {runLeft = CalculatePID(&leftData, target, pid_other);}
@@ -110,22 +93,9 @@ void encoderMotor(pid_info* pid, pid_info* pid_other, int target, bool forwardLe
     }
 
     chassisSet(leftData.speed * leftData.turnMultiplier, rightData.speed * rightData.turnMultiplier);        //request the calculated motor speed
-    tracking();
+    //tracking();
     delay(2);
   }
 }
 //calculates the ratio in which the robot moves in proportion to the number of
 //  ticks
-void intRatio(int encoderTicks, int angle) {
-  ratio = encoderTicks / angle;          //simple ration calculation
-}
-
-//use encoders to try to make an accurate turn
-void encoderTurn(float angle, Encoder* sensor_reading,
-    pid_info* pid, pid_info* motor2) {
-  //pass relevant information to motors
-  //encoderMotor(pid, (angle*ratio));
-  //negate the angle as the motor will turn the opposite way
-  angle *= -1;
-  //encoderMotor(motor2, (angle*ratio));
-}

@@ -60,7 +60,7 @@ void operatorControl() {
 			break;
 		}
 		printf("ready?\n");
-		motorReq(rollerIntake, -100);
+		motorReq(rollerIntake, 100);
 		delay(20);
 	}
 	encoderMotor(&driveStraightRight, &driveStraightLeft, 500, true, true);
