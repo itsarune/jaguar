@@ -137,12 +137,12 @@ prevaction = action; //Update the previous action
 
 //------------ EXPERIMENT. To be used with ball shooter. Not sure if it works ------------
 void align() {
-  float requiredMovement = angle * encoderturn; //Calculate encoder ticks required to align straight
+  //float requiredMovement = angle * encoderturn; //Calculate encoder ticks required to align straight
 
   if(angle <= 180) { //Check if the robot should turn left or right
-    encoderMotor(&driveStraightRight, &driveStraightLeft, requiredMovement, requiredMovement, false, true);
+    //encoderMotor(&driveStraightRight, &driveStraightLeft, requiredMovement, requiredMovement, false, true);
   }
   else {
-    encoderMotor(&driveStraightRight, &driveStraightLeft, requiredMovement, requiredMovement, true, false);
+    //encoderMotor(&driveStraightRight, &driveStraightLeft, requiredMovement, requiredMovement, true, false);
   }
 }
