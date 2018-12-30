@@ -81,7 +81,7 @@ void encoderMotor(pid_info* pid, pid_info* pid_other, int leftTarget, int rightT
   encoderLeftOffset = encoderGet(encoderLeft); //Set offsets so that the encoders don't have to be reset
   encoderRightOffset = encoderGet(encoderRight);
   
-  timeout = 10*((leftTarget + rightTarget)/2)/2 + millis();
+  timeout = 10*((abs(leftTarget) + abs(rightTarget))/2)/2 + millis();
   //printf("returned timeout%d", timeout);
 
   Reset(&rightData);
@@ -107,8 +107,8 @@ void encoderMotor(pid_info* pid, pid_info* pid_other, int leftTarget, int rightT
     if(runRight) {runRight = CalculatePID(&rightData, pid);}
     if(runLeft) {runLeft = CalculatePID(&leftData, pid_other);}
     if (millis()%20 <= 3) {
-      printf("Right: %d,%d\n", rightData.error, rightData.speed);
-      printf("Left: %d,%d\n", leftData.error, leftData.speed);
+      printf("Right: E: %d, T: %d %s\n", rightData.error, rightData.target, runRight ? "true" : "false");
+      printf("Left: E: %d, T %d %s\n", leftData.error, leftData.target, runLeft ? "true" : "false");
     }
 
     chassisSet(leftData.speed * leftData.turnMultiplier, rightData.speed * rightData.turnMultiplier);        //request the calculated motor speed
