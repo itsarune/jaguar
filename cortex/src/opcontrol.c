@@ -82,8 +82,11 @@ void operatorControl() {
 			if (abs(joystickGetAnalog(1, 2)) > joythresh){
 				rightSpeed = joystickGetAnalog(1, 2);
 			}
-			if (abs(joystickGetAnalog(1, 2)) < joythresh && abs(joystickGetAnalog(1, 3)) < joythresh){
-				rightSpeed = 0; leftSpeed = 0;
+			if (abs(joystickGetAnalog(1, 2)) < joythresh){
+				rightSpeed = 0;
+			}
+			if (abs(joystickGetAnalog(1, 3)) < joythresh){
+				leftSpeed = 0;
 			}
 			if (joystickGetDigital(1, 5, JOY_UP) || joystickGetDigital(1, 6, JOY_UP))
 			{
