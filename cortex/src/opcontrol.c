@@ -37,6 +37,7 @@ const float encoderConstant = 0.01;
 
 void operatorControl() {
 	encoderReset(encoderRight);
+	encoderReset(encoderLeft);
 	taskCreate(motorslewing, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_DEFAULT);
 	taskCreate(encoderMotor, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_HIGHEST);
 	//_DRONE_CONTROL_

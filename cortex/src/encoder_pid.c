@@ -25,12 +25,11 @@ int getEncoderRight() {
   This function uses a PID controller using information from the PID structure
   to move the robot based on sensor-readings (typically encocder-ticks)
 */
-struct pidData {
+typedef struct pidData {
   float sense;
   int lastError;
   int integral;
   int error, derivative, speed;
-  int turnMultiplier;
   int target;
 } pidData;
 
@@ -42,45 +41,37 @@ void Reset(struct pidData* data)
   data->lastError = 0;
   data->sense = 0;
   data->speed = 0;
-  data->turnMultiplier = 1;
-  data->target = 1;
+  data->target = 0;
 }
-
-int timeout;
 
 struct pidData leftData;
 struct pidData rightData;
 pid_info pid;
 pid_info pid_other;
 
-bool CalculatePID(struct pidData* data, pid_info pid)
+pidData CalculatePID(pidData data, pid_info pid)
 {
     //calculate the error from target to current readings
-    if(millis()%20 <= 3)
-    {
-      printf("%d, %d\n", data->target, data->error);
-    }
-    data->error = data->target*data->turnMultiplier - data->sense;
-    //printf("\nfinding the data error: %d, %f", data->error, pid->p);
+    data.error = data.target - data.sense;
 
-    data->integral += data->error;                  //add the error to the integral
+    data.integral += data.error;                  //add the error to the integral
     //find the derivative by calculating the difference from the previous two
     //  errors
-    data->derivative = data->error - data->lastError;
+    data.derivative = data.error - data.lastError;
 
     //disable the integral until it comes into a usable range
-    if(data->error == 0 || (abs(data->error) > (127/2))) { data->integral = 0; }
+    if(data.error == 0 || (abs(data.error) > (127/2))) { data.integral = 0; }
 
     //put the whole PID shenanigan together and calculate the speed
-    data->speed = (pid.p*data->error) + (pid.i*data->integral) + (pid.d*data->derivative);
+    data.speed = (pid.p*data.error) + (pid.i*data.integral) + (pid.d*data.derivative);
 
     //if the previous two errors were 0, then the robot has probably stopped,
     //  so exit the program
-    if (((data->error == 0 && data->lastError == 0))) { data->speed = 0; return false; }
+    if (((data.error == 0 && data.lastError == 0))) { data.speed = 0;}
 
     //end of loop, current error becomes the last error for the next run
-    data->lastError = data->error;
-    return true;
+    data.lastError = data.error;
+    return data;
 }
 
 void changeRightTarget(int target){
@@ -94,7 +85,6 @@ void changeLeftTarget(int target){
 void encoderMotor(void * parameter) {
   encoderLeftOffset = encoderGet(encoderLeft); //Set offsets so that the encoders don't have to be reset
   encoderRightOffset = encoderGet(encoderRight);
-    //printf("returned timeout%d", timeout);
 
   Reset(&rightData);
   Reset(&leftData);
@@ -106,25 +96,21 @@ void encoderMotor(void * parameter) {
 
   //variable holding sensor information (encoder)
   //resets the integral value
-  bool runRight = true;
-  bool runLeft = true;//start the PID controller
   //initialize the error, derivative and resulting speed values
   pid = driveStraightRight;
   pid_other = driveStraightLeft;
 
   while(1) {
-    //printf("PID data: %f, target: %d", pid->p, target);
     rightData.sense = getEncoderRight();
     leftData.sense = getEncoderLeft(); //get encoder readings
-    //printf("\nsense%f.1", sense);
-    runRight = CalculatePID(&rightData, pid);
-    runLeft = CalculatePID(&leftData, pid_other);
+    rightData = CalculatePID(rightData, pid);
+    leftData = CalculatePID(leftData, pid_other);
     if (millis()%20 <= 3) {
-      printf("Right: E: %d, T %d\n", rightData.error, rightData.target);
-      //printf("Left: E: %d, T %d\n", leftData.error, leftData.target);
+      printf("Right: E %d, T %d, S %d\n", rightData.error, rightData.target, rightData.speed);
+      printf("Left: E %d, T %d, S %d\n", leftData.error, leftData.target, leftData.speed);
     }
 
-    chassisSet(leftData.speed * leftData.turnMultiplier, rightData.speed * rightData.turnMultiplier);        //request the calculated motor speed
+    chassisSet(leftData.speed, rightData.speed);        //request the calculated motor speed
     tracking();
     delay(2);
   }
@@ -137,7 +123,7 @@ void intRatio(int encoderTicks, int angle) {
 
 //use encoders to try to make an accurate turn
 void encoderTurn(float angle, Encoder* sensor_reading,
-    pid_info* pid, pid_info* motor2) {
+  pid_info* pid, pid_info* motor2) {
   //pass relevant information to motors
   //encoderMotor(pid, (angle*ratio));
   //negate the angle as the motor will turn the opposite way
