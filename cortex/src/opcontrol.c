@@ -82,7 +82,7 @@ void operatorControl() {
 			if (abs(joystickGetAnalog(1, 2)) > joythresh){
 				rightSpeed = joystickGetAnalog(1, 2);
 			}
-			if (abs(joystickGetAnalog(1, 2)) < joythresh){
+			if (abs(joystickGetAnalog(1, 2)) < joythresh){ 
 				rightSpeed = 0;
 			}
 			if (abs(joystickGetAnalog(1, 3)) < joythresh){
@@ -120,7 +120,7 @@ void operatorControl() {
 				leftSpeed = 0;
 			}
 		}
-		tracking();
+		//tracking();
 	}
 
 }

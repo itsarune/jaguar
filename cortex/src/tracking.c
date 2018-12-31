@@ -113,6 +113,7 @@ if(prevaction != action) //this if statement will be true when we change what we
     distance = encoderGet(encoderLeft)/encodermove;
     xpos += distance*sin(angle);
     ypos += distance*cos(angle);
+    changeOffsets(encoderGet(encoderRight), encoderGet(encoderLeft));
     encoderReset(encoderRight);
     encoderReset(encoderLeft);
   }
@@ -121,12 +122,14 @@ if(prevaction != action) //this if statement will be true when we change what we
     distance = encoderGet(encoderLeft)/encodermove;
     xpos -= distance*sin(angle);
     ypos -= distance*cos(angle);
+    changeOffsets(encoderGet(encoderRight), encoderGet(encoderLeft));
     encoderReset(encoderRight);
     encoderReset(encoderLeft);
   }
   if(prevaction == 3)
   {
     angle += encoderGet(encoderLeft)/encoderturn;
+    changeOffsets(encoderGet(encoderRight), encoderGet(encoderLeft));
     encoderReset(encoderRight);
     encoderReset(encoderLeft);
   }

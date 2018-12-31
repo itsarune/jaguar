@@ -54,4 +54,9 @@ void encoderTurn(float angle, Encoder* sensor_reading,
   Turn the robot to specific angles
 */
 
+void changeOffsets(int right, int left);
+/*
+  Change the encoder offsets in PID
+*/
+
 #endif

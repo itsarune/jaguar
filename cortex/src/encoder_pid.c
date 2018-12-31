@@ -50,10 +50,9 @@ pid_info pid;
 pid_info pid_other;
 
 pidData CalculatePID(pidData data, pid_info pid)
-{
+{  
     //calculate the error from target to current readings
     data.error = data.target - data.sense;
-
     data.integral += data.error;                  //add the error to the integral
     //find the derivative by calculating the difference from the previous two
     //  errors
@@ -71,7 +70,17 @@ pidData CalculatePID(pidData data, pid_info pid)
 
     //end of loop, current error becomes the last error for the next run
     data.lastError = data.error;
+    if(millis()%300 <= 3)
+    { printf("Right: E %d, N %f, T %d, S %d\n", rightData.error, rightData.sense, rightData.target, rightData.speed);
+    printf("Left: E %d, N %f, T %d, S %d\n", leftData.error, leftData.sense, leftData.target, leftData.speed); }
+
     return data;
+}
+
+void changeOffsets(int right, int left)
+{
+  encoderRightOffset = right;
+  encoderLeftOffset = left;
 }
 
 void changeRightTarget(int target){
@@ -106,12 +115,12 @@ void encoderMotor(void * parameter) {
     rightData = CalculatePID(rightData, pid);
     leftData = CalculatePID(leftData, pid_other);
     if (millis()%20 <= 3) {
-      printf("Right: E %d, T %d, S %d\n", rightData.error, rightData.target, rightData.speed);
-      printf("Left: E %d, T %d, S %d\n", leftData.error, leftData.target, leftData.speed);
+      //printf("Right: E %d, N %d, S %d\n", rightData.error, rightData.sense, rightData.speed);
+      //printf("Left: E %d, N %d, S %d\n", leftData.error, leftData.sense, leftData.speed);
     }
 
     chassisSet(leftData.speed, rightData.speed);        //request the calculated motor speed
-    tracking();
+    //tracking();
     delay(2);
   }
 }
