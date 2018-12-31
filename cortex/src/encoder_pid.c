@@ -66,7 +66,7 @@ pidData CalculatePID(pidData data, pid_info pid)
 
     //if the previous two errors were 0, then the robot has probably stopped,
     //  so exit the program
-    if (((data.error == 0 && data.lastError == 0))) { data.speed = 0;}
+    if (((abs(data.error) <= 15 && abs(data.lastError) <= 15))) { data.speed = 0;}
 
     //end of loop, current error becomes the last error for the next run
     data.lastError = data.error;
