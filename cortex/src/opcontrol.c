@@ -46,9 +46,7 @@ void operatorControl() {
 	int power = 0;
 	int turn = 0;                               				//sets the power of the motor
 	bool run = false;
-	int intakeRun = 0;
-	int intakeSpeed = 100;
-	int intakeMultiplier = 0;
+	int intakeSpeed = 10;
 	/*int prevEncoderLeft = 0;
 	int prevEncoderRight = 0;
 	float driftMultiplierRight = 1;
@@ -64,9 +62,10 @@ void operatorControl() {
 		//motorReq(rollerIntake, 100);
 		delay(20);
 	}
-	encoderMotor(&driveStraightRight, &driveStraightLeft, 1100, true, true);
+	encoderMotor(&driveTurnRight, &driveTurnLeft, turn_ratio*90, -turn_ratio*90);
 
 	while(1) {
+		//printf("Right: %d ;\n Left: %d\n", encoderGet(encoderLeft), encoderGet(encoderRight));
 		if (joystickGetDigital(1, 7, JOY_LEFT))
 		{
 			run = true;
@@ -140,7 +139,7 @@ void operatorControl() {
 				turn = 0;
 			}
 		}
-		tracking();
+		//tracking();
 	}
 
 }

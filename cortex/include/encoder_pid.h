@@ -7,6 +7,8 @@
 #include "encoder_pid.h"
 #include "chassis.h"
 
+#define turn_ratio 3.73
+
 typedef struct pid {
 
   double p, i, d, motor;
@@ -15,11 +17,11 @@ typedef struct pid {
 
 typedef struct pidData {
   float sense;
-  int lastError;
+  int lastError, errorLongTimeAgo;
   int integral;
   int error, derivative, speed;
-  int turnMultiplier;
-} pidData;
+  int target;
+  } pidData;
 /*
   Stores the PID information
 */
@@ -32,15 +34,14 @@ pid_info driveTurnLeft;
 pidData rightData;
 pidData leftData;
 
-bool CalculatePID(pidData* data, int target, pid_info* pid);
+bool CalculatePID(pidData* data, pid_info* pid);
 
-int ratio;
 /*
   Sets the ratio for encoder-based turns
 
 */
 
-void encoderMotor(pid_info* pid, pid_info* pid_other, int target, bool forwardLeft, bool forwardRight);
+void encoderMotor(pid_info* pid, pid_info* pid_other, int targetLeft, int targetRight);
 /*
   Uses the quad encoder and PID controller to reach the PID target
 */

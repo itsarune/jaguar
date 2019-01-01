@@ -29,13 +29,13 @@ void Reset(pidData* data) {
   data->lastError = 0;
   data->sense = 0;
   data->speed = 0;
-  data->turnMultiplier = 1;
+  data->errorLongTimeAgo = 0;
 }
 
-bool CalculatePID(pidData* data, int target, pid_info* pid)
+bool CalculatePID(pidData* data, pid_info* pid)
 {
     //calculate the error from target to current readings
-    data->error = target*data->turnMultiplier - data->sense;
+    data->error = data->target - data->sense;
     //printf("\nfinding the data error: %d, %f", data->error, data->sense);
 
     data->integral += data->error;                  //add the error to the integral
@@ -51,28 +51,31 @@ bool CalculatePID(pidData* data, int target, pid_info* pid)
 
     //if the previous two errors were 0, then the robot has probably stopped,
     //  so exit the program
-    if (((data->error == 0 && data->lastError == 0)) || (int)millis() >= timeout) { data->speed = 0; return false; }
+    if (((data->error == data->errorLongTimeAgo))) { data->speed = 0; return false; }
 
     //end of loop, current error becomes the last error for the next run
+    if(millis()%300 > 2)
+    {data->errorLongTimeAgo = data->error;}
     data->lastError = data->error;
     return true;
 }
 
-void encoderMotor(pid_info* pid, pid_info* pid_other, int target, bool forwardLeft, bool forwardRight) {
+void encoderMotor(pid_info* pid, pid_info* pid_other, int targetLeft, int targetRight) {
   delay(20);
   encoderLeftOffset = encoderGet(encoderLeft); //Set offsets so that the encoders don't have to be reset
-  printf("john%d\n", encoderLeftOffset);
-  printf("otherjohn%d", encoderGet(encoderLeft));
   encoderRightOffset = encoderGet(encoderRight);
 
-  timeout = 10*abs(target)/2 + millis();
+  rightData.target = targetRight;
+  leftData.target = targetLeft;
+  printf("john%d\n", rightData.target);
+  printf("otherjohn%d", leftData.target);
+
+
+  timeout = 10*((abs(targetLeft) + abs(targetRight)) / 2)/2.54 + millis();
   //printf("returned timeout%d", timeout);
 
   Reset(&rightData);
   Reset(&leftData);
-
-  rightData.turnMultiplier = forwardRight == true ? 1 : -1;
-  leftData.turnMultiplier = forwardLeft == true ? 1 : -1;
 
   //variable holding sensor information (encoder)
   //resets the integral value
@@ -86,14 +89,14 @@ void encoderMotor(pid_info* pid, pid_info* pid_other, int target, bool forwardLe
     leftData.sense = encoderGet(encoderLeft) - encoderLeftOffset; //get encoder readings
     //printf("\nsense%f, %f", *(&rightData.sense), *(&leftData.sense));
 
-    if(runRight) {runRight = CalculatePID(&rightData, target, pid);}
-    if(runLeft) {runLeft = CalculatePID(&leftData, target, pid_other);}
+    if(runRight) {runRight = CalculatePID(&rightData, pid);}
+    if(runLeft) {runLeft = CalculatePID(&leftData, pid_other);}
     if (millis()%25 <= 2) {
       printf("\nRight: %d,%d\n", rightData.error, rightData.speed);
       printf("Left: %d,%d \n", leftData.error, leftData.speed);
     }
 
-    chassisSet(leftData.speed * leftData.turnMultiplier, rightData.speed * rightData.turnMultiplier);        //request the calculated motor speed
+    chassisSet(leftData.speed,rightData.speed);        //request the calculated motor speed
     //tracking();
     delay(2);
   }

@@ -140,9 +140,9 @@ void align() {
   float requiredMovement = angle * encoderturn; //Calculate encoder ticks required to align straight
 
   if(angle <= 180) { //Check if the robot should turn left or right
-    encoderMotor(&driveStraightRight, &driveStraightLeft, requiredMovement, false, true);
+    encoderMotor(&driveStraightRight, &driveStraightLeft, requiredMovement, -requiredMovement);
   }
   else {
-    encoderMotor(&driveStraightRight, &driveStraightLeft, requiredMovement, true, false);
+    encoderMotor(&driveStraightRight, &driveStraightLeft, -requiredMovement, requiredMovement);
   }
 }
