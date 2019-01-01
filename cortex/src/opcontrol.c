@@ -33,13 +33,13 @@
  * This task should never exit; it should end with some kind of infinite loop, even if empty.
  */
 
-const float encoderConstant = 0.01;
+float encoderConstant = 0.015;
 
 void operatorControl() {
 	encoderReset(encoderRight);
 	encoderReset(encoderLeft);
-	taskCreate(motorslewing, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_DEFAULT);
-	taskCreate(encoderMotor, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_HIGHEST);
+	taskCreate(motorslewing, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_HIGHEST);
+	taskCreate(encoderMotor, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_DEFAULT);
 	//_DRONE_CONTROL_
 
 	//this variable ensures that each movement was meant to occur rather
@@ -47,7 +47,7 @@ void operatorControl() {
 	int joythresh = 10;
 	//int turnJoy = 50;                           				//sets the power of the motor
 	bool run = false;
-	int intakeSpeed = 80;
+	int intakeSpeed = 127;
 	float rightSpeed = 0;
 	float leftSpeed = 0;
 	/*int prevEncoderLeft = 0;
@@ -90,9 +90,9 @@ void operatorControl() {
 			}
 			if (joystickGetDigital(1, 5, JOY_UP) || joystickGetDigital(1, 6, JOY_UP))
 			{
-				leftSpeed /= 3;
-				rightSpeed /=3;
+				encoderConstant = 0.03;
 			}
+			else { encoderConstant = 0.015;}
 
 			float leftMove= leftSpeed * encoderConstant;
 			float rightMove = rightSpeed * encoderConstant;

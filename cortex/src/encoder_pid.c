@@ -30,7 +30,7 @@ typedef struct pidData {
   int lastError;
   int integral;
   int error, derivative, speed;
-  int target;
+  int target, lastTarget;
 } pidData;
 
 void Reset(struct pidData* data)
@@ -42,6 +42,7 @@ void Reset(struct pidData* data)
   data->sense = 0;
   data->speed = 0;
   data->target = 0;
+  data->lastTarget = 0;
 }
 
 struct pidData leftData;
@@ -66,12 +67,16 @@ pidData CalculatePID(pidData data, pid_info pid)
 
     //if the previous two errors were 0, then the robot has probably stopped,
     //  so exit the program
-    if (((abs(data.error) <= 15 && abs(data.lastError) <= 15))) { data.speed = 0;}
+    if ((abs(data.error) <= 0 && abs(data.lastError) <= 0) || (data.target == data.lastTarget && data.error == data.lastError)) { 
+      data.speed = 0;
+      data.target = data.sense;
+    }
 
     //end of loop, current error becomes the last error for the next run
     data.lastError = data.error;
-    if(millis()%300 <= 3)
-    { printf("Right: E %d, N %f, T %d, S %d\n", rightData.error, rightData.sense, rightData.target, rightData.speed);
+    if(millis()%400 <= 3)
+    { data.lastTarget = data.target;
+      printf("Right: E %d, N %f, T %d, S %d\n", rightData.error, rightData.sense, rightData.target, rightData.speed);
     printf("Left: E %d, N %f, T %d, S %d\n", leftData.error, leftData.sense, leftData.target, leftData.speed); }
 
     return data;
