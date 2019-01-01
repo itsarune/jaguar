@@ -46,8 +46,8 @@ void initialize() {
   encoderReset(encoderLeft);
 
   //initialize controllers that contrain information for driving straight with right motor
-  pidSet(&driveStraightRight, 0.15, 0, 0.1, rightMotor1);
+  pidSet(&driveStraightRight, 0.7, 0, 0.1, rightMotor1);
   pidSet(&driveTurnRight, 0.5, 0, 0, rightMotor1);
   pidSet(&driveTurnLeft, 0, 0, 0, leftMotor1);
-  pidSet(&driveStraightLeft, 0.9, 0, 0.1, leftMotor1);
+  pidSet(&driveStraightLeft, 0.8, 0, 0.1, leftMotor1);
 }
