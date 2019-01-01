@@ -35,6 +35,7 @@
 
 void operatorControl() {
 	encoderReset(encoderRight);
+	encoderReset(encoderLeft);
 	taskCreate(motorslewing, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_DEFAULT);
 	//_DRONE_CONTROL_
 
@@ -60,10 +61,11 @@ void operatorControl() {
 			break;
 		}
 		printf("ready?\n");
-		motorReq(rollerIntake, 100);
+		//motorReq(rollerIntake, 100);
 		delay(20);
 	}
-	encoderMotor(&driveStraightRight, &driveStraightLeft, 500, true, true);
+	encoderMotor(&driveStraightRight, &driveStraightLeft, 1100, true, true);
+
 	while(1) {
 		if (joystickGetDigital(1, 7, JOY_LEFT))
 		{
