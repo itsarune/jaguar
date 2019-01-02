@@ -54,7 +54,7 @@ bool CalculatePID(pidData* data, pid_info* pid)
     if (((data->error == data->errorLongTimeAgo))) { data->speed = 0; return false; }
 
     //end of loop, current error becomes the last error for the next run
-    if(millis()%300 > 2)
+    if(millis()%300 < 2)
     {data->errorLongTimeAgo = data->error;}
     data->lastError = data->error;
     return true;
