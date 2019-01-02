@@ -46,6 +46,8 @@ void encoderMotor(pid_info* pid, pid_info* pid_other, int targetLeft, int target
   Uses the quad encoder and PID controller to reach the PID target
 */
 
+void encoderTurn(float angle);
+
 void pidSet(pid_info* pid,
   double p, double i, double d,
   double motor);

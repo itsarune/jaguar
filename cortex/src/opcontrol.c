@@ -62,7 +62,7 @@ void operatorControl() {
 		//motorReq(rollerIntake, 100);
 		delay(20);
 	}
-	encoderMotor(&driveTurnRight, &driveTurnLeft, turn_ratio*90, -turn_ratio*90);
+	encoderTurn(90);
 
 	while(1) {
 		//printf("Right: %d ;\n Left: %d\n", encoderGet(encoderLeft), encoderGet(encoderRight));

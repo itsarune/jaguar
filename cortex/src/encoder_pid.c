@@ -60,7 +60,7 @@ bool CalculatePID(pidData* data, pid_info* pid)
     return true;
 }
 
-void encoderMotor(pid_info* pid, pid_info* pid_other, int targetLeft, int targetRight) {
+void encoderMotor(pid_info* leftPID, pid_info* rightPID, int targetLeft, int targetRight) {
   delay(20);
   encoderLeftOffset = encoderGet(encoderLeft); //Set offsets so that the encoders don't have to be reset
   encoderRightOffset = encoderGet(encoderRight);
@@ -89,8 +89,8 @@ void encoderMotor(pid_info* pid, pid_info* pid_other, int targetLeft, int target
     leftData.sense = encoderGet(encoderLeft) - encoderLeftOffset; //get encoder readings
     //printf("\nsense%f, %f", *(&rightData.sense), *(&leftData.sense));
 
-    if(runRight) {runRight = CalculatePID(&rightData, pid);}
-    if(runLeft) {runLeft = CalculatePID(&leftData, pid_other);}
+    if(runRight) {runRight = CalculatePID(&rightData, rightPID);}
+    if(runLeft) {runLeft = CalculatePID(&leftData, leftPID);}
     if (millis()%25 <= 2) {
       printf("\nRight: %d,%d\n", rightData.error, rightData.speed);
       printf("Left: %d,%d \n", leftData.error, leftData.speed);
@@ -103,3 +103,8 @@ void encoderMotor(pid_info* pid, pid_info* pid_other, int targetLeft, int target
 }
 //calculates the ratio in which the robot moves in proportion to the number of
 //  ticks
+
+void encoderTurn(float angle)
+{
+  encoderMotor(&driveStraightLeft, &driveStraightRight, angle * turn_ratio, -angle * turn_ratio);
+}

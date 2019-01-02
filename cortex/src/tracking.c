@@ -9,8 +9,8 @@ float xpos = 0; //xpos, angle and ypos are global so they can be accessed anywhe
 float ypos = 0;
 float angle = 0;
 
-const int encodermove = 100; //Encoder value to move the robot 1 in, depends on build
-const int encoderturn = 10; //Encoder value to turn the robot 1 degree
+const int encoderMoveConstant = 100; //Encoder value to move the robot 1 in, depends on build
+const int encoderTurnConstant = 10; //Encoder value to turn the robot 1 degree
 
 void tracking() {
 int action = 1; //tracks what we're currently doing- 1 =fwd 2 = bck 3 = turn
@@ -46,7 +46,7 @@ while(1)
   {
     if(prevaction == 1)
     {
-      distance = encoderGet(encoderLeft)/encodermove;
+      distance = encoderGet(encoderLeft)/encoderMoveConstant;
       xpos += distance*sin(angle);
       ypos += distance*cos(angle);
       encoderReset(encoderRight);
@@ -54,7 +54,7 @@ while(1)
     }
     if(prevaction == 2)
     {
-      distance = encoderGet(encoderLeft)/encodermove;
+      distance = encoderGet(encoderLeft)/encoderMoveConstant;
       xpos -= distance*sin(angle);
       ypos -= distance*cos(angle);
       encoderReset(encoderRight);
@@ -62,7 +62,7 @@ while(1)
     }
     if(prevaction == 3)
     {
-      angle += encoderGet(encoderLeft)/encoderturn;
+      angle += encoderGet(encoderLeft)/encoderTurnConstant;
       encoderReset(encoderRight);
       encoderReset(encoderLeft);
     }
@@ -79,8 +79,8 @@ float ypos = 0;
 int prevaction = 1;
 float angle = 0;
 
-const float encodermove = 9.89/360; //Encoder value to move the robot 1 in, depends on build
-const float encoderturn = 10; //Encoder value to turn the robot 1 degree
+const float encoderMoveConstant = 9.89/360; //Encoder value to move the robot 1 in, depends on build
+const float encoderTurnConstant = 10; //Encoder value to turn the robot 1 degree
 
 void tracking() {
 float distance = 0;
@@ -110,7 +110,7 @@ if(prevaction != action) //this if statement will be true when we change what we
 {
   if(prevaction == 1)
   {
-    distance = encoderGet(encoderLeft)/encodermove;
+    distance = encoderGet(encoderLeft)/encoderMoveConstant;
     xpos += distance*sin(angle);
     ypos += distance*cos(angle);
     encoderReset(encoderRight);
@@ -118,7 +118,7 @@ if(prevaction != action) //this if statement will be true when we change what we
   }
   if(prevaction == 2)
   {
-    distance = encoderGet(encoderLeft)/encodermove;
+    distance = encoderGet(encoderLeft)/encoderMoveConstant;
     xpos -= distance*sin(angle);
     ypos -= distance*cos(angle);
     encoderReset(encoderRight);
@@ -126,7 +126,7 @@ if(prevaction != action) //this if statement will be true when we change what we
   }
   if(prevaction == 3)
   {
-    angle += encoderGet(encoderLeft)/encoderturn;
+    angle += encoderGet(encoderLeft)/encoderTurnConstant;
     encoderReset(encoderRight);
     encoderReset(encoderLeft);
   }
@@ -137,12 +137,6 @@ prevaction = action; //Update the previous action
 
 //------------ EXPERIMENT. To be used with ball shooter. Not sure if it works ------------
 void align() {
-  float requiredMovement = angle * encoderturn; //Calculate encoder ticks required to align straight
-
-  if(angle <= 180) { //Check if the robot should turn left or right
-    encoderMotor(&driveStraightRight, &driveStraightLeft, requiredMovement, -requiredMovement);
-  }
-  else {
-    encoderMotor(&driveStraightRight, &driveStraightLeft, -requiredMovement, requiredMovement);
-  }
+  float turnLeftOrRight = angle >= 180 ? 1 : -1; //If the angle is less than 180, it is faster to turn left, otherwise its faster to turn right
+  encoderTurn(angle * turnLeftOrRight);
 }
