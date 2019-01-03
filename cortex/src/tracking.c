@@ -85,7 +85,8 @@ const float encoderturn = 10; //Encoder value to turn the robot 1 degree
 void tracking() {
 float distance = 0;
 int action = 1; //tracks what we're currently doing- 1 =fwd 2 = bck 3 = turn
-
+if(millis()%200 < 3)
+{printf("X: %f\n Y: %f\n", xpos, ypos);}
 //motorGet checks the speed assigned to the motors. If this is running in parallel to the main opcontrol
 //then it will not be possible to get power and turn, therefore this must be used
 if(motorGet(leftMotor1) > 0 && motorGet(rightMotor1) > 0) //assuming old joystick mapping, will change depending on how we go fwd

@@ -15,10 +15,10 @@ int encoderLeftOffset;
 int encoderRightOffset;
 
 int getEncoderLeft() {
-  return encoderGet(encoderLeft) - encoderLeftOffset;
+  return encoderGet(encoderLeft) + encoderLeftOffset;
 }
 int getEncoderRight() {
-  return encoderGet(encoderRight) - encoderRightOffset;
+  return encoderGet(encoderRight) + encoderRightOffset;
 }
 
 /*
@@ -76,16 +76,17 @@ pidData CalculatePID(pidData data, pid_info pid)
     data.lastError = data.error;
     if(millis()%400 <= 3)
     { data.lastTarget = data.target;
-      printf("Right: E %d, N %f, T %d, S %d\n", rightData.error, rightData.sense, rightData.target, rightData.speed);
-    printf("Left: E %d, N %f, T %d, S %d\n", leftData.error, leftData.sense, leftData.target, leftData.speed); }
+    //  printf("Right: E %d, N %f, T %d, S %d\n", rightData.error, rightData.sense, rightData.target, rightData.speed);
+    //printf("Left: E %d, N %f, T %d, S %d\n", leftData.error, leftData.sense, leftData.target, leftData.speed); 
+    }
 
     return data;
 }
 
 void changeOffsets(int right, int left)
 {
-  encoderRightOffset = right;
-  encoderLeftOffset = left;
+  encoderRightOffset += right;
+  encoderLeftOffset += left;
 }
 
 void changeRightTarget(int target){
@@ -125,7 +126,7 @@ void encoderMotor(void * parameter) {
     }
 
     chassisSet(leftData.speed, rightData.speed);        //request the calculated motor speed
-    //tracking();
+    tracking();
     delay(2);
   }
 }

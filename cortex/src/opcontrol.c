@@ -40,6 +40,7 @@ void operatorControl() {
 	encoderReset(encoderLeft);
 	taskCreate(motorslewing, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_HIGHEST);
 	taskCreate(encoderMotor, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_DEFAULT);
+	//taskCreate(shoot, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
 	//_DRONE_CONTROL_
 
 	//this variable ensures that each movement was meant to occur rather
@@ -47,15 +48,15 @@ void operatorControl() {
 	int joythresh = 10;
 	//int turnJoy = 50;                           				//sets the power of the motor
 	bool run = false;
-	int intakeSpeed = 127;
+	int intakeSpeed = 80;
 	float rightSpeed = 0;
 	float leftSpeed = 0;
+	float timeOfLastShot = 0;
 	/*int prevEncoderLeft = 0;
 	int prevEncoderRight = 0;
 	float driftMultiplierRight = 1;
 	float driftMultiplierLeft = 1;*/
 	printf("start");
-	printf("beginning pid");
 	/*while (1) {
 		if (joystickGetDigital(1,7, JOY_LEFT)) {
 			motorReq(rollerIntake, 0);
@@ -112,12 +113,21 @@ void operatorControl() {
 			else {
 				motorReq(rollerIntake, 0);
 			}
+			
+			if (joystickGetDigital(1, 8, JOY_DOWN)) {
+				motorReq(shooterMotor, 50);
+				timeOfLastShot = millis();
+			}
 
 			if (joystickGetDigital(1, 7, JOY_RIGHT))
 			{
 				run = false;
 				rightSpeed = 0;
 				leftSpeed = 0;
+			}
+			if (millis() > timeOfLastShot + 500)
+			{
+				motorReq(shooterMotor, 0);
 			}
 		}
 		//tracking();
