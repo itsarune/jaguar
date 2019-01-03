@@ -48,7 +48,7 @@ void operatorControl() {
 	int joythresh = 10;
 	//int turnJoy = 50;                           				//sets the power of the motor
 	bool run = false;
-	int intakeSpeed = 80;
+	int intakeSpeed = 127;
 	float rightSpeed = 0;
 	float leftSpeed = 0;
 	float timeOfLastShot = 0;
@@ -115,7 +115,7 @@ void operatorControl() {
 			}
 			
 			if (joystickGetDigital(1, 8, JOY_DOWN)) {
-				motorReq(shooterMotor, 50);
+				motorReq(shooterMotor, 128);
 				timeOfLastShot = millis();
 			}
 
