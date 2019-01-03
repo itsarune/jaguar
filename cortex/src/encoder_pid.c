@@ -47,8 +47,11 @@ void Reset(struct pidData* data)
 
 struct pidData leftData;
 struct pidData rightData;
+struct pidData rightDataAuton;
+struct pidData leftDataAuton;
 pid_info pid;
 pid_info pid_other;
+int timeout;
 
 pidData CalculatePID(pidData data, pid_info pid)
 {  
@@ -96,6 +99,46 @@ void changeRightTarget(int target){
 void changeLeftTarget(int target){
   leftData.target += target;
 }
+
+void encoderMotorAutonomous(pid_info leftPID, pid_info rightPID, int targetLeft, int targetRight) {
+  delay(20);
+  encoderLeftOffset = encoderGet(encoderLeft); //Set offsets so that the encoders don't have to be reset
+  encoderRightOffset = encoderGet(encoderRight);
+
+  rightData.target = targetRight;
+  leftData.target = targetLeft;
+
+  //timeout = 10*((abs(targetLeft) + abs(targetRight)) / 2)/2.54 + millis();
+  //printf("returned timeout%d", timeout);
+
+  Reset(&rightDataAuton);
+  Reset(&leftDataAuton);
+
+  //variable holding sensor information (encoder)
+  //resets the integral value
+  bool runRight = true;
+  bool runLeft = true;//start the PID controller
+  //initialize the error, derivative and resulting speed values
+
+  while(runRight || runLeft) {
+    //printf("PID data: %f, target: %d", pid->p, target);
+    rightData.sense = encoderGet(encoderRight) - encoderRightOffset;
+    leftData.sense = encoderGet(encoderLeft) - encoderLeftOffset; //get encoder readings
+    //printf("\nsense%f, %f", *(&rightData.sense), *(&leftData.sense));
+
+    if(runRight) {rightData = CalculatePID(rightData, rightPID);}
+    if(runLeft) {leftData = CalculatePID(leftData, leftPID);}
+    if (millis()%25 <= 2) {
+      printf("\nRight: %d,%d\n", rightData.error, rightData.speed);
+      printf("Left: %d,%d \n", leftData.error, leftData.speed);
+    }
+
+    chassisSet(leftData.speed,rightData.speed);        //request the calculated motor speed
+    //tracking();
+    delay(2);
+  }
+}
+
 
 void encoderMotor(void * parameter) {
   encoderLeftOffset = encoderGet(encoderLeft); //Set offsets so that the encoders don't have to be reset
