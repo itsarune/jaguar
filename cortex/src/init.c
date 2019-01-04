@@ -50,4 +50,6 @@ void initialize() {
   pidSet(&driveTurnRight, 0.5, 0, 0, rightMotor1);
   pidSet(&driveTurnLeft, 0, 0, 0, leftMotor1);
   pidSet(&driveStraightLeft, 0.3, 0.00015, 0.12, leftMotor1);
+  pidSet(&autonStraightLeft, 0.95, 0.000001, 0.27, leftMotor1);
+  pidSet(&autonStraightRight, 0.221, 0.01675, 0.48, rightMotor1);
 }

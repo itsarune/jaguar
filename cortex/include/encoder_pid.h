@@ -6,7 +6,7 @@
 #include "motorslew.h"
 #include "encoder_pid.h"
 #include "chassis.h"
-
+#define encoder_turn_constant 4.022
 typedef struct pid {
 
   double p, i, d, motor;
@@ -21,6 +21,8 @@ pid_info driveStraightRight;
 pid_info driveStraightLeft;
 pid_info driveTurnRight;
 pid_info driveTurnLeft;
+pid_info autonStraightRight;
+pid_info autonStraightLeft;
 
 int ratio;
 /*

@@ -39,9 +39,9 @@ void operatorControl() {
 	encoderReset(encoderRight);
 	encoderReset(encoderLeft);
 	taskCreate(motorslewing, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_HIGHEST);
+	//
 	taskCreate(encoderMotor, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_DEFAULT);
 	//taskCreate(shoot, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
-	//_DRONE_CONTROL_
 
 	//this variable ensures that each movement was meant to occur rather
 	//than a roaming joystick
@@ -65,8 +65,17 @@ void operatorControl() {
 		printf("ready?\n");
 		motorReq(rollerIntake, -100);
 		delay(20);
+	}*/
+	while (1) {
+		if (joystickGetDigital(1,7, JOY_LEFT)) {
+			motorReq(rollerIntake, 0);
+			break;
+		}
+		printf("ready?\n");
+		//motorReq(rollerIntake, 100);
+		delay(20);
 	}
-	encoderMotor(&driveStraightRight, &driveStraightLeft, 650, true, true);*/
+	encoderMotorAutonomous(autonStraightLeft, autonStraightRight, 650, 650);
 	while(1) {
 		if (joystickGetDigital(1, 7, JOY_LEFT))
 		{
@@ -83,7 +92,7 @@ void operatorControl() {
 			if (abs(joystickGetAnalog(1, 2)) > joythresh){
 				rightSpeed = joystickGetAnalog(1, 2);
 			}
-			if (abs(joystickGetAnalog(1, 2)) < joythresh){ 
+			if (abs(joystickGetAnalog(1, 2)) < joythresh){
 				rightSpeed = 0;
 			}
 			if (abs(joystickGetAnalog(1, 3)) < joythresh){
@@ -113,7 +122,7 @@ void operatorControl() {
 			else {
 				motorReq(rollerIntake, 0);
 			}
-			
+
 			if (joystickGetDigital(1, 8, JOY_DOWN)) {
 				motorReq(shooterMotor, 128);
 				timeOfLastShot = millis();

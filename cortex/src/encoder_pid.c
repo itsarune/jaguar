@@ -54,7 +54,7 @@ pid_info pid_other;
 int timeout;
 
 pidData CalculatePID(pidData data, pid_info pid)
-{  
+{
     //calculate the error from target to current readings
     data.error = data.target - data.sense;
     data.integral += data.error;                  //add the error to the integral
@@ -70,7 +70,7 @@ pidData CalculatePID(pidData data, pid_info pid)
 
     //if the previous two errors were 0, then the robot has probably stopped,
     //  so exit the program
-    if ((abs(data.error) <= 0 && abs(data.lastError) <= 0) || (data.target == data.lastTarget && data.error == data.lastError)) { 
+    if ((abs(data.error) <= 0 && abs(data.lastError) <= 0) || (data.target == data.lastTarget && data.error == data.lastError)) {
       data.speed = 0;
       data.target = data.sense;
     }
@@ -80,7 +80,7 @@ pidData CalculatePID(pidData data, pid_info pid)
     if(millis()%400 <= 3)
     { data.lastTarget = data.target;
     //  printf("Right: E %d, N %f, T %d, S %d\n", rightData.error, rightData.sense, rightData.target, rightData.speed);
-    //printf("Left: E %d, N %f, T %d, S %d\n", leftData.error, leftData.sense, leftData.target, leftData.speed); 
+    //printf("Left: E %d, N %f, T %d, S %d\n", leftData.error, leftData.sense, leftData.target, leftData.speed);
     }
 
     return data;
@@ -126,8 +126,8 @@ void encoderMotorAutonomous(pid_info leftPID, pid_info rightPID, int targetLeft,
     leftData.sense = encoderGet(encoderLeft) - encoderLeftOffset; //get encoder readings
     //printf("\nsense%f, %f", *(&rightData.sense), *(&leftData.sense));
 
-    if(runRight) {rightData = CalculatePID(rightData, rightPID);}
-    if(runLeft) {leftData = CalculatePID(leftData, leftPID);}
+    if(runRight) {rightData = CalculatePID(rightDataAuton, rightPID);}
+    if(runLeft) {leftData = CalculatePID(leftDataAuton, leftPID);}
     if (millis()%25 <= 2) {
       printf("\nRight: %d,%d\n", rightData.error, rightData.speed);
       printf("Left: %d,%d \n", leftData.error, leftData.speed);
