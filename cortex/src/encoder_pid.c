@@ -27,10 +27,10 @@ int getEncoderRight() {
 */
 typedef struct pidData {
   float sense;
-  int lastError;
+  int lastError, errorLongTimeAgo;
   int integral;
   int error, derivative, speed;
-  int target, lastTarget;
+  int target, lastTarget, timePassed;
 } pidData;
 
 void Reset(struct pidData* data)
@@ -39,10 +39,12 @@ void Reset(struct pidData* data)
   data->error = 0;
   data->integral = 0;
   data->lastError = 0;
+  data->errorLongTimeAgo = 0;
   data->sense = 0;
   data->speed = 0;
   data->target = 0;
   data->lastTarget = 0;
+  data->timePassed = 0;
 }
 
 struct pidData leftData;
@@ -53,8 +55,43 @@ pid_info pid;
 pid_info pid_other;
 int timeout;
 
+bool CalculatePIDAuto(pidData* data, pid_info pid)
+{
+  data->timePassed += 2;
+  //calculate the error from target to current readings
+data->error = data->target - data->sense;
+//printf("%d, %d, %f\n", data->error, data->target, pid.p);
+//printf("\nfinding the data error: %d, %f", data->error, data->sense);
+
+data->integral += data->error;                  //add the error to the integral
+//find the derivative by calculating the difference from the previous two
+//  errors
+data->derivative = data->error - data->lastError;
+
+//disable the integral until it comes into a usable range
+if(data->error == 0 || (abs(data->error) > (127/2))) { data->integral = 0; }
+
+//put the whole PID shenanigan together and calculate the speed
+data->speed = (pid.p*data->error) + (pid.i*data->integral) + (pid.d*data->derivative);
+
+//if the previous two errors were 0, then the robot has probably stopped,
+//  so exit the program
+if (((data->error == data->errorLongTimeAgo))) { data->speed = 0; return false; }
+
+//end of loop, current error becomes the last error for the next run
+if(data->timePassed%500 < 2)
+{
+  data->errorLongTimeAgo = data->error;
+  printf("Updated error long time ago: %d: \n", data->errorLongTimeAgo);
+}
+data->lastError = data->error;
+return true;
+}
+
 pidData CalculatePID(pidData data, pid_info pid)
 {
+    /*if (millis()%40 <= 2)
+      printf("PID prop: %f\n", pid.p);*/
     //calculate the error from target to current readings
     data.error = data.target - data.sense;
     data.integral += data.error;                  //add the error to the integral
@@ -73,6 +110,7 @@ pidData CalculatePID(pidData data, pid_info pid)
     if ((abs(data.error) <= 0 && abs(data.lastError) <= 0) || (data.target == data.lastTarget && data.error == data.lastError)) {
       data.speed = 0;
       data.target = data.sense;
+      //printf("exit speed\n");
     }
 
     //end of loop, current error becomes the last error for the next run
@@ -85,6 +123,7 @@ pidData CalculatePID(pidData data, pid_info pid)
 
     return data;
 }
+
 
 void changeOffsets(int right, int left)
 {
@@ -105,14 +144,15 @@ void encoderMotorAutonomous(pid_info leftPID, pid_info rightPID, int targetLeft,
   encoderLeftOffset = encoderGet(encoderLeft); //Set offsets so that the encoders don't have to be reset
   encoderRightOffset = encoderGet(encoderRight);
 
-  rightData.target = targetRight;
-  leftData.target = targetLeft;
+  //function();
 
   //timeout = 10*((abs(targetLeft) + abs(targetRight)) / 2)/2.54 + millis();
   //printf("returned timeout%d", timeout);
 
   Reset(&rightDataAuton);
   Reset(&leftDataAuton);
+  rightDataAuton.target = targetRight;
+  leftDataAuton.target = targetLeft;
 
   //variable holding sensor information (encoder)
   //resets the integral value
@@ -122,19 +162,19 @@ void encoderMotorAutonomous(pid_info leftPID, pid_info rightPID, int targetLeft,
 
   while(runRight || runLeft) {
     //printf("PID data: %f, target: %d", pid->p, target);
-    rightData.sense = encoderGet(encoderRight) - encoderRightOffset;
-    leftData.sense = encoderGet(encoderLeft) - encoderLeftOffset; //get encoder readings
+    rightDataAuton.sense = getEncoderRight();
+    leftDataAuton.sense = getEncoderLeft(); //get encoder readings
     //printf("\nsense%f, %f", *(&rightData.sense), *(&leftData.sense));
 
-    if(runRight) {rightData = CalculatePID(rightDataAuton, rightPID);}
-    if(runLeft) {leftData = CalculatePID(leftDataAuton, leftPID);}
+    if(runRight) {runRight = CalculatePIDAuto(&rightDataAuton, rightPID);}
+    if(runLeft) {runLeft = CalculatePIDAuto(&leftDataAuton, leftPID);}
     if (millis()%25 <= 2) {
-      printf("\nRight: %d,%d\n", rightData.error, rightData.speed);
-      printf("Left: %d,%d \n", leftData.error, leftData.speed);
+      printf("\nRight: %d,%d\n", rightDataAuton.error, rightDataAuton.speed);
+      printf("Left: %d,%d, %f \n", leftDataAuton.error, leftDataAuton.speed, leftPID.p);
     }
 
-    chassisSet(leftData.speed,rightData.speed);        //request the calculated motor speed
-    //tracking();
+    chassisSet(leftDataAuton.speed,rightDataAuton.speed);        //request the calculated motor speed
+    tracking();
     delay(2);
   }
 }
@@ -180,11 +220,8 @@ void intRatio(int encoderTicks, int angle) {
 }
 
 //use encoders to try to make an accurate turn
-void encoderTurn(float angle, Encoder* sensor_reading,
-  pid_info* pid, pid_info* motor2) {
-  //pass relevant information to motors
-  //encoderMotor(pid, (angle*ratio));
+void encoderTurn(float angle) {
+  encoderMotorAutonomous(autonStraightLeft, autonStraightRight, angle*encoder_turn_constant, -angle*encoder_turn_constant);
   //negate the angle as the motor will turn the opposite way
-  angle *= -1;
   //encoderMotor(motor2, (angle*ratio));
 }

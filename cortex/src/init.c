@@ -47,9 +47,9 @@ void initialize() {
 
   //initialize controllers that contrain information for driving straight with right motor
   pidSet(&driveStraightRight, 0.25, 0, 0.2, rightMotor1);
-  pidSet(&driveTurnRight, 0.5, 0, 0, rightMotor1);
+  pidSet(&driveTurnRight, 0, 0, 0, rightMotor1);
   pidSet(&driveTurnLeft, 0, 0, 0, leftMotor1);
   pidSet(&driveStraightLeft, 0.3, 0.00015, 0.12, leftMotor1);
   pidSet(&autonStraightLeft, 0.95, 0.000001, 0.27, leftMotor1);
-  pidSet(&autonStraightRight, 0.221, 0.01675, 0.48, rightMotor1);
+  pidSet(&autonStraightRight, 0.171, 0.016, 0.49, rightMotor1);
 }

@@ -40,7 +40,7 @@ void operatorControl() {
 	encoderReset(encoderLeft);
 	taskCreate(motorslewing, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_HIGHEST);
 	//
-	taskCreate(encoderMotor, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_DEFAULT);
+	//
 	//taskCreate(shoot, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
 
 	//this variable ensures that each movement was meant to occur rather
@@ -75,7 +75,10 @@ void operatorControl() {
 		//motorReq(rollerIntake, 100);
 		delay(20);
 	}
-	encoderMotorAutonomous(autonStraightLeft, autonStraightRight, 650, 650);
+	//encoderTurn(90);
+	encoderMotorAutonomous(autonStraightLeft, autonStraightRight, 1000, 1000);
+	encoderTurn(60);
+	taskCreate(encoderMotor, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_DEFAULT);
 	while(1) {
 		if (joystickGetDigital(1, 7, JOY_LEFT))
 		{

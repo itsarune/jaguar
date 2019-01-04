@@ -6,7 +6,7 @@
 #include "motorslew.h"
 #include "encoder_pid.h"
 #include "chassis.h"
-#define encoder_turn_constant 4.022
+#define encoder_turn_constant 4.1
 typedef struct pid {
 
   double p, i, d, motor;
@@ -52,8 +52,7 @@ void intRatio(int encoderTicks, int angle);
   Initializes the ratio for encoder-based turns
 */
 
-void encoderTurn(float angle, Encoder* sensor_reading,
-    pid_info* pid, pid_info* motor2);
+void encoderTurn(float angle);
 /*
   Turn the robot to specific angles
 */
