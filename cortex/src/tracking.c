@@ -102,20 +102,34 @@ void tracking()
     printf("angle: %f\n", angle);
   }
 
-  if ((leftSpeed > 0 && rightSpeed > 0) || (leftSpeed < 0 && rightSpeed < 0))
+  int leftJoystickValue = 0;
+  if(joystickGetAnalog(1, 3) > 25)
   {
+    leftJoystickValue = joystickGetAnalog(1, 3);
+  }
+  int rightJoystickValue = 0;
+  if(joystickGetAnalog(1, 2) > 25)
+  {
+    rightJoystickValue = joystickGetAnalog(1, 2);
+  }
+
+  if ((leftJoystickValue > 0 && rightJoystickValue > 0) || (leftJoystickValue < 0 && rightJoystickValue < 0))
+  {
+    printf("straight\n");
     action = 1;
   }
 
   //While doing 1 wheel turn
-  else if ((leftSpeed == 0 && abs(rightSpeed) > 0) || (abs(leftSpeed) > 0 && rightSpeed == 0))
+  else if ((leftJoystickValue == 0 && abs(rightJoystickValue) > 0) || (abs(leftJoystickValue) > 0 && rightJoystickValue == 0))
   {
+    printf("One wheel\n");
     action = 2;
   }
 
   //While doing point turn (2 wheel turn)
-  else if ((leftSpeed > 0 && rightSpeed < 0) || (leftSpeed < 0 && rightSpeed > 0))
+  else if ((leftJoystickValue > 0 && rightJoystickValue < 0) || (leftJoystickValue < 0 && rightJoystickValue > 0))
   {
+    printf("2wheel\n");
     action = 3;
   }
 
