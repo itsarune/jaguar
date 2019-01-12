@@ -82,7 +82,7 @@ if (((data->error == data->errorLongTimeAgo))) { data->speed = 0; return false; 
 if(data->timePassed%500 < 2)
 {
   data->errorLongTimeAgo = data->error;
-  printf("Updated error long time ago: %d: \n", data->errorLongTimeAgo);
+  /*printf("Updated error long time ago: %d: \n", data->errorLongTimeAgo);*/
 }
 data->lastError = data->error;
 return true;
@@ -168,10 +168,10 @@ void encoderMotorAutonomous(pid_info leftPID, pid_info rightPID, int targetLeft,
 
     if(runRight) {runRight = CalculatePIDAuto(&rightDataAuton, rightPID);}
     if(runLeft) {runLeft = CalculatePIDAuto(&leftDataAuton, leftPID);}
-    if (millis()%25 <= 2) {
+    /*if (millis()%25 <= 2) {
       printf("\nRight: %d,%d\n", rightDataAuton.error, rightDataAuton.speed);
       printf("Left: %d,%d, %f \n", leftDataAuton.error, leftDataAuton.speed, leftPID.p);
-    }
+    }*/
 
     chassisSet(leftDataAuton.speed,rightDataAuton.speed);        //request the calculated motor speed
     tracking();

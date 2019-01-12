@@ -14,6 +14,7 @@
 #include "encoder_pid.h"
 #include "chassis.h"
 #include "tracking.h"
+#include "autonomous.h"
 
 /*
  * Runs the user operator control code. This function will be started in its own task with the
@@ -36,6 +37,16 @@
 float encoderConstant = 0.015;
 
 void operatorControl() {
+	while (1) {
+		if (joystickGetDigital(1,7, JOY_LEFT)) {
+			motorReq(rollerIntake, 0);
+			break;
+		}
+		printf("ready?\n");
+		//motorReq(rollerIntake, 100);
+		delay(20);
+	}
+	myAuton();
 	encoderReset(encoderRight);
 	encoderReset(encoderLeft);
 	taskCreate(motorslewing, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_HIGHEST);
@@ -66,18 +77,10 @@ void operatorControl() {
 		motorReq(rollerIntake, -100);
 		delay(20);
 	}*/
-	while (1) {
-		if (joystickGetDigital(1,7, JOY_LEFT)) {
-			motorReq(rollerIntake, 0);
-			break;
-		}
-		printf("ready?\n");
-		//motorReq(rollerIntake, 100);
-		delay(20);
-	}
+
 	//encoderTurn(90);
-	encoderMotorAutonomous(autonStraightLeft, autonStraightRight, 1000, 1000);
-	encoderTurn(60);
+	/*encoderMotorAutonomous(autonStraightLeft, autonStraightRight, 1000, 1000);
+	encoderTurn(60);*/
 	taskCreate(encoderMotor, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_DEFAULT);
 	while(1) {
 		if (joystickGetDigital(1, 7, JOY_LEFT))

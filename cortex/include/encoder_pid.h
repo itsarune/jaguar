@@ -23,6 +23,8 @@ pid_info driveTurnRight;
 pid_info driveTurnLeft;
 pid_info autonStraightRight;
 pid_info autonStraightLeft;
+pid_info autonBackRight;
+pid_info autonBackLeft;
 
 int ratio;
 /*
