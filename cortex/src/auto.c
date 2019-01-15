@@ -12,6 +12,7 @@
 
 #include "main.h"
 #include "encoder_pid.h"
+#include "autonomous.h"
 
 /*
  * Runs the user autonomous code. This function will be started in its own task with the default
@@ -28,13 +29,5 @@
  * so, the robot will await a switch to another mode or disable/enable cycle.
  */
 void autonomous() {
-  delay(5000);
-    printf("we're doing autonomous now");
-    //create the slew-rate task
-
-    //ask the right motor to move forward a certain amount of ticks
-    //encoderMotor(&driveStraightRight, 5000, encoderRight);
-    //checking whether structs work by calling p of driveEncoderLeft
-    printf("%f\n", driveStraightLeft.p);
-    //encoderMotor(&driveStraightRight, 5000, true, true);
+  myAuton();
 }

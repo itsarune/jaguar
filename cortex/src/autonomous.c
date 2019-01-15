@@ -10,7 +10,8 @@ void myAuton() {
     printf("Autonomous done!");
     return;
   }
+  encoderMotorAutonomous(autonBackLeft, autonBackRight, -1100, -1100);
   motorReq(1, 127);
-  encoderMotorAutonomous(autonBackLeft, autonBackRight, -1500, -1500);
+  encoderMotorAutonomous(autonBackLeft, autonBackRight, -400, -400);
   motorReq(1,0);
 }
