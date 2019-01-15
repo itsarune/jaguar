@@ -6,4 +6,7 @@
 /*The function contains the autonomous route that will be taken*/
 void myAuton();
 
+/* sets up for autonomous shooting*/
+void flagShoot();
+
 #endif

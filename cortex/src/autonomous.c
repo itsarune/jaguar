@@ -15,3 +15,9 @@ void myAuton() {
   encoderMotorAutonomous(autonBackLeft, autonBackRight, -400, -400);
   motorReq(1,0);
 }
+
+void flagShoot() {
+  motorReq(shooterMotor, 128);
+  delay(500);
+  motorReq(shooterMotor, 0);
+}
