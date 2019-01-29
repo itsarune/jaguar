@@ -14,6 +14,7 @@
 #define rightMotor3 4
 #define rollerIntake 1
 #define shooterMotor 5
+#define maxRightMotorSpeed 108
 
 //set speed of drive system
 void chassisSet(int left, int right); //sets the speed of the drive system

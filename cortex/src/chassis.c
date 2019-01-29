@@ -5,7 +5,7 @@ void chassisSet(int left, int right) { //sets the speed of the drive system
   motorReq(leftMotor1, left);
   motorReq(leftMotor2, left);
   motorReq(leftMotor3, left);
-  if(abs(right) < 90) //VALUE NEEDS TESTING WITH OPCONTROL PID
+  if(abs(right) < maxRightMotorSpeed) //VALUE NEEDS TESTING WITH OPCONTROL PID
   {
     motorReq(rightMotor1, -right);
     motorReq(rightMotor2, -right);
@@ -14,8 +14,8 @@ void chassisSet(int left, int right) { //sets the speed of the drive system
   else
   {
     float multiplier = right > 0 ? 1 : -1;
-    motorReq(rightMotor1, 90 * multiplier);
-    motorReq(rightMotor2, 90 * multiplier);
-    motorReq(rightMotor3, 90 * multiplier);
+    motorReq(rightMotor1, maxRightMotorSpeed * multiplier);
+    motorReq(rightMotor2, maxRightMotorSpeed * multiplier);
+    motorReq(rightMotor3, maxRightMotorSpeed * multiplier);
   }
 }
