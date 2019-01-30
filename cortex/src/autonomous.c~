@@ -15,7 +15,7 @@ void myAuton(int route) {
       printf("Autonomous done!");
       return;
     }
-  } else if (route == 2) {
+  } else (route == 2) {
       return;
   }
 }
