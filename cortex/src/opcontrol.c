@@ -46,7 +46,7 @@ void operatorControl() {
 		//motorReq(rollerIntake, 100);
 		delay(20);
 	}
-	myAuton(1);
+	myAuton(2);
 	encoderReset(encoderRight);
 	encoderReset(encoderLeft);
 	taskCreate(motorslewing, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_HIGHEST);
