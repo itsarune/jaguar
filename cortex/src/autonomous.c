@@ -10,6 +10,7 @@ void myAuton(int route) {
     encoderMotorAutonomous(autonBackLeft, autonBackRight, -1200, -1200);
     motorReq(1, 127);
     encoderMotorAutonomous(autonBackLeft, autonBackRight, -250, -250);
+
     motorReq(1,0);
     /*encoderMotorAutonomous(autonStraightLeft, autonStraightRight, 250, 250);
     encoderTurn(-90);
@@ -24,17 +25,17 @@ void myAuton(int route) {
     taskCreate(motorslewing, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_HIGHEST);
     int autonEndTime = millis() + 15000;
     printf("Starting autonomous code at %d", (int)millis());
-    encoderMotorAutonomous(autonBackLeft, autonBackRight, -800, -800);
-    flagShoot();
-    encoderMotorAutonomous(autonBackLeft, autonBackRight, -1200, -1200);
-    encoderMotorAutonomous(autonBackLeft, autonBackRight, 2000, -2000);
-    encoderTurn(90);
-    encoderMotorAutonomous(autonBackLeft, autonBackRight, -1200, -1200);
-    motorReq(1, 127);
-    encoderMotorAutonomous(autonBackLeft, autonBackRight, -250, -250);
-    motorReq(1,0);
-    encoderTurn(90);
-    encoderMotorAutonomous(autonBackLeft, autonBackRight, -1600, -1600);
+    encoderMotorAutonomous(autonBackLeft, autonBackRight, -800, -800); //move forward to shooting position
+    flagShoot(); //shoot flag
+    encoderMotorAutonomous(autonBackLeft, autonBackRight, -1200, -1200); //hit low flag
+    encoderMotorAutonomous(autonBackLeft, autonBackRight, 2000, 2000); //return to spawn
+    encoderTurn(90); //turn towards platform
+    encoderMotorAutonomous(autonBackLeft, autonBackRight, -1200, -1200); //move towards tilted cone
+    motorReq(1, 127); //start intake
+    encoderMotorAutonomous(autonBackLeft, autonBackRight, -250, -250); //yeet the ball
+    motorReq(1,0); //stop intake
+    encoderTurn(90); //turn towards platform
+    encoderMotorAutonomous(autonBackLeft, autonBackRight, -1600, -1600); //hop onto platform
 
 
 
