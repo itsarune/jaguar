@@ -98,8 +98,8 @@ void tracking()
 
   if (millis() % 500 < 3)
   {
-    /*printf("X: %f\n Y: %f\n", xpos, ypos);
-    printf("angle: %f\n", angle);*/
+    printf("X: %f\n Y: %f\n", xpos, ypos);
+    printf("angle: %f\n", angle);
   }
 
   if ((leftSpeed > 0 && rightSpeed > 0) || (leftSpeed < 0 && rightSpeed < 0))

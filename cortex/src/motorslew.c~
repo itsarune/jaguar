@@ -62,8 +62,6 @@ void motorslewing(void * parameter) {              //motor slew function
 
 void motorReq(int channel, int speed) {            //speed request
     //set the requested speed for the requested motor
-    speed = speed > 127 ? 127 : speed;
-    speed = speed < -127 ? -127 : speed;
     motor_req[channel] = speed;
     motor_slew[channel] = true;                    //motor requires slewing
 }
