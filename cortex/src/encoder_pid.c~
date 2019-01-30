@@ -169,8 +169,8 @@ void encoderMotorAutonomous(pid_info leftPID, pid_info rightPID, int targetLeft,
     if(runRight) {runRight = CalculatePIDAuto(&rightDataAuton, rightPID);}
     if(runLeft) {runLeft = CalculatePIDAuto(&leftDataAuton, leftPID);}
     if (millis()%25 <= 2) {
-      printf("\nRight: %d,%d\n", rightDataAuton.sense, rightDataAuton.target);
-      printf("Left: %d,%d, %f \n", leftDataAuton.sense, leftDataAuton.target, leftPID.p);
+      printf("\nRight: %f,%d\n", rightDataAuton.sense, rightDataAuton.target);
+      printf("Left: %f,%d, %f \n", leftDataAuton.sense, leftDataAuton.target, leftPID.p);
     }
 
     chassisSet(leftDataAuton.speed,rightDataAuton.speed);        //request the calculated motor speed
