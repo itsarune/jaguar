@@ -181,8 +181,8 @@ void encoderMotorAutonomous(pid_info leftPID, pid_info rightPID, int targetLeft,
 
 
 void encoderMotor(void * parameter) {
-  encoderLeftOffset = encoderGet(encoderLeft); //Set offsets so that the encoders don't have to be reset
-  encoderRightOffset = encoderGet(encoderRight);
+  encoderReset(encoderRight);
+  encoderReset(encoderLeft);
 
   Reset(&rightData);
   Reset(&leftData);

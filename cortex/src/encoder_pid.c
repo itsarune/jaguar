@@ -141,8 +141,8 @@ void changeLeftTarget(int target){
 
 void encoderMotorAutonomous(pid_info leftPID, pid_info rightPID, int targetLeft, int targetRight) {
   delay(20);
-  encoderLeftOffset = encoderGet(encoderLeft); //Set offsets so that the encoders don't have to be reset
-  encoderRightOffset = encoderGet(encoderRight);
+  encoderReset(encoderRight);
+  encoderReset(encoderLeft);
 
   //function();
 
@@ -162,27 +162,27 @@ void encoderMotorAutonomous(pid_info leftPID, pid_info rightPID, int targetLeft,
 
   while(runRight || runLeft) {
     //printf("PID data: %f, target: %d", pid->p, target);
-    rightDataAuton.sense = getEncoderRight();
-    leftDataAuton.sense = getEncoderLeft(); //get encoder readings
+    rightDataAuton.sense = encoderGet(encoderRight);
+    leftDataAuton.sense = encoderGet(encoderLeft); //get encoder readings
     //printf("\nsense%f, %f", *(&rightData.sense), *(&leftData.sense));
 
     if(runRight) {runRight = CalculatePIDAuto(&rightDataAuton, rightPID);}
     if(runLeft) {runLeft = CalculatePIDAuto(&leftDataAuton, leftPID);}
     if (millis()%25 <= 2) {
-      printf("\nRight: %f,%d\n", rightDataAuton.sense, rightDataAuton.target);
-      printf("Left: %f,%d, %f \n", leftDataAuton.sense, leftDataAuton.target, leftPID.p);
+      printf("\nRight: %d,%d\n", rightDataAuton.speed, rightDataAuton.target);
+      printf("Left: %d,%d, %f \n", leftDataAuton.speed, leftDataAuton.target, leftPID.p);
     }
 
     chassisSet(leftDataAuton.speed,rightDataAuton.speed);        //request the calculated motor speed
-    tracking();
+    //tracking();
     delay(2);
   }
 }
 
 
 void encoderMotor(void * parameter) {
-  encoderLeftOffset = encoderGet(encoderLeft); //Set offsets so that the encoders don't have to be reset
-  encoderRightOffset = encoderGet(encoderRight);
+  encoderReset(encoderRight);
+  encoderReset(encoderLeft);
 
   Reset(&rightData);
   Reset(&leftData);

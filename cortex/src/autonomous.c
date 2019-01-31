@@ -9,11 +9,19 @@ void myAuton(int route) {
     printf("Starting autonomous code at %d", (int)millis());
     encoderMotorAutonomous(autonBackLeft, autonBackRight, -1200, -1200);
     motorReq(1, 127);
-    encoderMotorAutonomous(autonBackLeft, autonBackRight, -250, -250);
+    encoderMotorAutonomous(autonBackLeft, autonBackRight, -300, -300);
+    delay(2000);
     motorReq(1,0);
+    encoderMotorAutonomous(autonStraightLeft, autonStraightRight, 600, 600);
+    encoderTurn(-90);
+    encoderMotorAutonomous(autonStraightLeft, autonStraightRight, 500, 500);
+    encoderTurn(95);
+    motorReq(1, 127);
+    encoderMotorAutonomous(autonBackLeft, autonBackRight, -600, -600);
+    motorReq(1, 0);
     /*encoderMotorAutonomous(autonStraightLeft, autonStraightRight, 250, 250);
     encoderTurn(-90);
-    encoderMotorAutonomous(autonStraightLeft, autonStraightRight, 250, 250);*/
+    encoderMotorAuto nomous(autonStraightLeft, autonStraightRight, 250, 250);*/
     if ((int)millis() >= autonEndTime) {
       printf("Autonomous done!");
       return;
