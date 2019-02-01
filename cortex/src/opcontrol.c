@@ -14,6 +14,7 @@
 #include "encoder_pid.h"
 #include "chassis.h"
 #include "tracking.h"
+#include "autonomous.h"
 
 /*
  * Runs the user operator control code. This function will be started in its own task with the
@@ -32,62 +33,119 @@
  *
  * This task should never exit; it should end with some kind of infinite loop, even if empty.
  */
+
+float encoderConstant = 0.015;
+
 void operatorControl() {
+	while (1) {
+		if (joystickGetDigital(1,7, JOY_LEFT)) {
+			motorReq(rollerIntake, 0);
+			break;
+		}
+		printf("ready?\n");
+		//motorReq(rollerIntake, 100);
+		delay(20);
+	}
+	myAuton(1, "red");
 	encoderReset(encoderRight);
-	taskCreate(motorslewing, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_DEFAULT);
-	//_DRONE_CONTROL_
+	encoderReset(encoderLeft);
+	taskCreate(motorslewing, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_HIGHEST);
+	//
+	//
+	//taskCreate(shoot, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
 
 	//this variable ensures that each movement was meant to occur rather
 	//than a roaming joystick
 	int joythresh = 10;
-	int turnJoy = 50;
-	int power = 0;
-	int turn = 0;                               				//sets the power of the motor
+	//int turnJoy = 50;                           				//sets the power of the motor
 	bool run = false;
+	int intakeSpeed = 127;
+	float rightSpeed = 0;
+	float leftSpeed = 0;
+	float timeOfLastShot = 0;
+	/*int prevEncoderLeft = 0;
+	int prevEncoderRight = 0;
+	float driftMultiplierRight = 1;
+	float driftMultiplierLeft = 1;*/
+	printf("start");
+	/*while (1) {
+		if (joystickGetDigital(1,7, JOY_LEFT)) {
+			motorReq(rollerIntake, 0);
+			break;
+		}
+		printf("ready?\n");
+		motorReq(rollerIntake, -100);
+		delay(20);
+	}*/
+
+	//encoderTurn(90);
+	/*encoderMotorAutonomous(autonStraightLeft, autonStraightRight, 1000, 1000);
+	encoderTurn(60);*/
+	taskCreate(encoderMotor, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_DEFAULT);
 	while(1) {
 		if (joystickGetDigital(1, 7, JOY_LEFT))
 		{
 			run = true;
 		}
 		if (run) {
-			printf("start");
 			//printf("printing");
 			//count = encoderGet(encoderRight);
 			//printf("\nthe encoder value%d, %d", count, encoderGet(encoderLeft));
-			if (((abs(joystickGetAnalog(1, 1))) > turnJoy) || (abs(joystickGetAnalog(1, 2)) > turnJoy)) {
-				if(abs(joystickGetAnalog(1, 2)) >= abs(joystickGetAnalog(1,1))) {
-					power = joystickGetAnalog(1, 2) / 4;
-					turn = 0;
-				}
-				else {
-					power = 0;
-					turn = joystickGetAnalog(1, 1) / 4;
-				}
 
-			} else if (abs(joystickGetAnalog(1, 3)) > joythresh || abs(joystickGetAnalog(1, 4)) > joythresh) {
-				if(abs(joystickGetAnalog(1, 3)) >= abs(joystickGetAnalog(1,4))) {
-					power = joystickGetAnalog(1, 3);
-					turn = 0;
-				}
-				else {
-					power = 0;
-					turn = joystickGetAnalog(1, 4);
-				}
-			} else {
-				power = 0;
-				turn = 0;
+			if (abs(joystickGetAnalog(1, 3)) > joythresh){
+				leftSpeed = joystickGetAnalog(1,3);
 			}
-			chassisSet(power+turn, power-turn);
+			if (abs(joystickGetAnalog(1, 2)) > joythresh){
+				rightSpeed = joystickGetAnalog(1, 2);
+			}
+			if (abs(joystickGetAnalog(1, 2)) < joythresh){
+				rightSpeed = 0;
+			}
+			if (abs(joystickGetAnalog(1, 3)) < joythresh){
+				leftSpeed = 0;
+			}
+			if (joystickGetDigital(1, 5, JOY_UP) || joystickGetDigital(1, 6, JOY_UP))
+			{
+				encoderConstant = 0.03;
+			}
+			else { encoderConstant = 0.015;}
+
+			float leftMove= leftSpeed * encoderConstant;
+			float rightMove = rightSpeed * encoderConstant;
+
+			//chassisSet(leftSpeed, rightSpeed);
+			if(abs(rightMove) > 0 || abs(leftMove) > 0) {
+				changeRightTarget(rightMove);
+				changeLeftTarget(leftMove);
+			}
 			delay(2);
+			if (joystickGetDigital(1, 5, JOY_DOWN)) {
+				motorReq(rollerIntake, -intakeSpeed);
+			}
+			else if(joystickGetDigital(1, 6, JOY_DOWN)) {
+				motorReq(rollerIntake, intakeSpeed);
+			}
+			else {
+				motorReq(rollerIntake, 0);
+			}
+
+			if (joystickGetDigital(1, 8, JOY_DOWN)) {
+				motorReq(shooterMotor, 128);
+				timeOfLastShot = millis();
+			}
+
 			if (joystickGetDigital(1, 7, JOY_RIGHT))
 			{
 				run = false;
-				power = 0;
-				turn = 0;
+				rightSpeed = 0;
+				leftSpeed = 0;
+			}
+			if (millis() > timeOfLastShot + 500)
+			{
+				motorReq(shooterMotor, 0);
 			}
 		}
-		printf("test");
-		tracking();
+		//tracking();
 	}
 
 }

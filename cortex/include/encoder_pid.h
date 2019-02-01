@@ -6,7 +6,7 @@
 #include "motorslew.h"
 #include "encoder_pid.h"
 #include "chassis.h"
-
+#define encoder_turn_constant 4.1
 typedef struct pid {
 
   double p, i, d, motor;
@@ -21,6 +21,10 @@ pid_info driveStraightRight;
 pid_info driveStraightLeft;
 pid_info driveTurnRight;
 pid_info driveTurnLeft;
+pid_info autonStraightRight;
+pid_info autonStraightLeft;
+pid_info autonBackRight;
+pid_info autonBackLeft;
 
 int ratio;
 /*
@@ -28,10 +32,15 @@ int ratio;
 
 */
 
-void encoderMotor(pid_info* pid, int target, Encoder* sensor_reading);
+void changeRightTarget(int target);
+void changeLeftTarget(int target);
+
+void encoderMotor(void * parameter);
 /*
   Uses the quad encoder and PID controller to reach the PID target
 */
+
+void encoderMotorAutonomous(pid_info leftPID, pid_info rightPID, int targetLeft, int targetRight);
 
 void pidSet(pid_info* pid,
   double p, double i, double d,
@@ -45,10 +54,14 @@ void intRatio(int encoderTicks, int angle);
   Initializes the ratio for encoder-based turns
 */
 
-void encoderTurn(float angle, Encoder* sensor_reading,
-    pid_info* pid, pid_info* motor2);
+void encoderTurn(float angle);
 /*
   Turn the robot to specific angles
+*/
+
+void changeOffsets(int right, int left);
+/*
+  Change the encoder offsets in PID
 */
 
 #endif
