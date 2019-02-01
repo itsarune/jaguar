@@ -1,8 +1,8 @@
 #include "autonomous.h"
 
-void myAuton(int route, char position[3]) {
+void myAuton(int route, int position) {
   int turnMultiplier;
-  turnMultiplier = (position == "red") ? 1 : -1;
+  turnMultiplier = (position == 0) ? 1 : -1;
   if (route == 1) {
     encoderReset(encoderRight);
     encoderReset(encoderLeft);

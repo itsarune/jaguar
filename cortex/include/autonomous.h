@@ -4,7 +4,7 @@
 #include "main.h"
 
 /*The function contains the autonomous route that will be taken*/
-void myAuton(int route, char position[3]);
+void myAuton(int route, int position);
 
 /* sets up for autonomous shooting*/
 void flagShoot();
