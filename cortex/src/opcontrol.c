@@ -37,7 +37,7 @@
 float encoderConstant = 0.015;
 
 void operatorControl() {
-	while (1) {
+	/*while (1) {
 		if (joystickGetDigital(1,7, JOY_LEFT)) {
 			motorReq(rollerIntake, 0);
 			break;
@@ -45,11 +45,11 @@ void operatorControl() {
 		printf("ready?\n");
 		//motorReq(rollerIntake, 100);
 		delay(20);
-	}
+	}*/
 	encoderReset(encoderRight);
 	encoderReset(encoderLeft);
 	taskCreate(motorslewing, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_HIGHEST);
-	myAuton(2, 1);
+	//encoderMotorAutonomous(autonBackLeft, autonBackRight, 1000, 1000);
 	//
 	//
 	//taskCreate(shoot, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
@@ -87,10 +87,11 @@ void operatorControl() {
 	encoderTurn(60);*/
 	taskCreate(encoderMotor, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_DEFAULT);
 	while(1) {
-		if (joystickGetDigital(1, 7, JOY_LEFT))
+		run = true;
+		/*if (joystickGetDigital(1, 7, JOY_LEFT))
 		{
 			run = true;
-		}
+		}*/
 		if (run) {
 			//printf("printing");
 			//count = encoderGet(encoderRight);
@@ -172,17 +173,17 @@ void operatorControl() {
 				timeOfLastShot = millis();
 			}
 
-			if (joystickGetDigital(1, 7, JOY_RIGHT))
+			/*if (joystickGetDigital(1, 7, JOY_RIGHT))
 			{
 				run = false;
 				rightSpeed = 0;
 				leftSpeed = 0;
-			}
+			}*/
 			if (millis() > timeOfLastShot + 500)
 			{
 				motorReq(shooterMotor, 0);
 			}
-			if(millis() > timeOfLastLift + 250)
+			if(millis() > timeOfLastLift + 500)
 			{
 				if(motorGet(armMotor2) > 10)
 				{

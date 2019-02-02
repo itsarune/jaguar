@@ -2,6 +2,8 @@
 
 void myAuton(int route, int position) {
   int turnMultiplierAuto;
+  //red = 0, blue = 1; position
+  //route 1 is away from flags, route 2 is near flags
   turnMultiplierAuto = (position == 0) ? 1 : -1;
   if (route == 1) {
     encoderReset(encoderRight);
@@ -24,6 +26,12 @@ void myAuton(int route, int position) {
     motorReq(1, 127);
     encoderMotorAutonomous(autonBackLeft, autonBackRight, -700, -700);
     motorReq(1, 0);
+    encoderMotorAutonomous(autonStraightLeft, autonStraightRight, 1500, 1500);
+    encoderTurn(90*turnMultiplierAuto);
+    encoderMotorAutonomous(autonStraightLeft, autonStraightRight, 2000, 2000);
+    chassisSet(127, 127);
+    delay(2000);
+    chassisSet(0, 0);
     /*encoderMotorAutonomous(autonStraightLeft, autonStraightRight, 250, 250);
     encoderTurn(-90);
     encoderMotorAuto nomous(autonStraightLeft, autonStraightRight, 250, 250);*/
@@ -32,14 +40,20 @@ void myAuton(int route, int position) {
       return;
     }
   } else if (route == 2) {
-      encoderTurn(-45*turnMultiplierAuto);
-      motorReq(1, 127);
-      encoderMotorAutonomous(autonBackLeft, autonBackRight, -600, -600);
-      motorReq(1, 0);
-      encoderMotorAutonomous(autonStraightLeft, autonStraightRight, 600, 600);
-      encoderTurn(-45*turnMultiplierAuto);
-      encoderMotorAutonomous(autonBackLeft, autonBackRight, -1500, -1500);
-      encoderMotorAutonomous(autonBackLeft, autonBackRight, 1500, 1500);
+      int autonEndTime = millis() + 15000;
+      printf("Starting autonomous code at %d", (int)millis());
+      encoderMotorAutonomous(autonBackLeft, autonBackRight, -400, -400); //move forward to shooting position
+      flagShoot(); //shoot flag
+      encoderMotorAutonomous(autonBackLeft, autonBackRight, -1500, -1500); //hit low flag
+      encoderMotorAutonomous(autonBackLeft, autonBackRight, 1900, 1900); //return to spawn
+      encoderTurn(90*turnMultiplierAuto); //turn towards platform
+      encoderMotorAutonomous(autonBackLeft, autonBackRight, -1200, -1200); //move towards tilted cone
+      motorReq(1, 127); //start intake
+      encoderMotorAutonomous(autonBackLeft, autonBackRight, -250, -250); //yeet the ball
+      motorReq(1,0); //stop intake
+      encoderMotorAutonomous(autonBackLeft, autonBackRight, 450, 450);
+      encoderTurn(90*turnMultiplierAuto); //turn towards platform
+      encoderMotorAutonomous(autonBackLeft, autonBackRight, -1600, -1600); //hop onto platform
       return;
   }
 }
