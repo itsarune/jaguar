@@ -39,18 +39,15 @@ void operatorControl() {
 	encoderReset(encoderRight);
 	encoderReset(encoderLeft);
 	taskCreate(motorslewing, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_HIGHEST);
-	taskCreate(encoderMotor, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_DEFAULT);
 	//taskCreate(shoot, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
 	//_DRONE_CONTROL_
 
 	//this variable ensures that each movement was meant to occur rather
 	//than a roaming joystick
-	int joythresh = 10;
+	int joythresh = 25;
 	//int turnJoy = 50;                           				//sets the power of the motor
 	bool run = false;
 	int intakeSpeed = 127;
-	float rightSpeed = 0;
-	float leftSpeed = 0;
 	float timeOfLastShot = 0;
 	float timeOfLastLiftPress = 0;
 	int reverseMultiplier = 1;
@@ -70,23 +67,24 @@ void operatorControl() {
 			//count = encoderGet(encoderRight);
 			//printf("\nthe encoder value%d, %d", count, encoderGet(encoderLeft));
 
-			if (abs(joystickGetAnalog(1, 3)) > joythresh){
+			float rightSpeed = 0;
+			float leftSpeed = 0;
+
+if (abs(joystickGetAnalog(1, 3)) > joythresh){
 				leftSpeed = joystickGetAnalog(1,3);
+			} else {
+				leftSpeed = 0;
 			}
 			if (abs(joystickGetAnalog(1, 2)) > joythresh){
 				rightSpeed = joystickGetAnalog(1, 2);
-			}
-			if (abs(joystickGetAnalog(1, 2)) < joythresh){ 
+			} else {
 				rightSpeed = 0;
-			}
-			if (abs(joystickGetAnalog(1, 3)) < joythresh){
-				leftSpeed = 0;
 			}
 			if (joystickGetDigital(1, 5, JOY_UP) || joystickGetDigital(1, 6, JOY_UP))
 			{
-				encoderConstant = 0.03;
+				leftSpeed /= 3;
+				rightSpeed /=3;
 			}
-			else { encoderConstant = 0.015;}
 
 			if (joystickGetDigital(1, 8, JOY_LEFT)) {
 				reverseMultiplier = -1;
@@ -94,22 +92,16 @@ void operatorControl() {
 			if (joystickGetDigital(1, 8, JOY_RIGHT)) {
 				reverseMultiplier = 1;
 			}
-			float leftMove= leftSpeed * encoderConstant * reverseMultiplier;
-			float rightMove = rightSpeed * encoderConstant * reverseMultiplier;
 
 			//chassisSet(leftSpeed, rightSpeed);
-			if(abs(rightMove) > 0 || abs(leftMove) > 0) {
 				if(reverseMultiplier == 1)
 				{
-					changeRightTarget(rightMove);
-					changeLeftTarget(leftMove);
+					chassisSet(leftSpeed, rightSpeed);
 				}
 				else
 				{
-					changeRightTarget(leftMove);
-					changeLeftTarget(rightMove);
+					chassisSet(rightSpeed, leftSpeed);
 				}
-			}
 			delay(2);
 			if (joystickGetDigital(1, 5, JOY_DOWN)) {
 				motorReq(rollerIntake, -intakeSpeed);
