@@ -25,16 +25,17 @@ void myAuton(int route) {
     taskCreate(motorslewing, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_HIGHEST);
     int autonEndTime = millis() + 15000;
     printf("Starting autonomous code at %d", (int)millis());
-    encoderMotorAutonomous(autonBackLeft, autonBackRight, -800, -800); //move forward to shooting position
+    encoderMotorAutonomous(autonBackLeft, autonBackRight, -400, -400); //move forward to shooting position
     flagShoot(); //shoot flag
-    encoderMotorAutonomous(autonBackLeft, autonBackRight, -1200, -1200); //hit low flag
-    encoderMotorAutonomous(autonBackLeft, autonBackRight, 2000, 2000); //return to spawn
-    encoderTurn(90); //turn towards platform
+    encoderMotorAutonomous(autonBackLeft, autonBackRight, -1500, -1500); //hit low flag
+    encoderMotorAutonomous(autonBackLeft, autonBackRight, 1900, 1900); //return to spawn
+    encoderTurn(90*turnMultiplierAuto); //turn towards platform
     encoderMotorAutonomous(autonBackLeft, autonBackRight, -1200, -1200); //move towards tilted cone
     motorReq(1, 127); //start intake
     encoderMotorAutonomous(autonBackLeft, autonBackRight, -250, -250); //yeet the ball
     motorReq(1,0); //stop intake
-    encoderTurn(90); //turn towards platform
+    encoderMotorAutonomous(autonBackLeft, autonBackRight, 450, 450);
+    encoderTurn(90*turnMultiplierAuto); //turn towards platform
     encoderMotorAutonomous(autonBackLeft, autonBackRight, -1600, -1600); //hop onto platform
 
 
