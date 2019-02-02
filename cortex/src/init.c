@@ -54,4 +54,5 @@ void initialize() {
   pidSet(&autonStraightRight, 0.161, 0.016, 0.49, rightMotor1);
   pidSet(&autonBackRight, 0.125, 0.00000001, 0.17, rightMotor1);
   pidSet(&autonBackLeft, 0.18, 0.000000001, 0.13, leftMotor1);
+  taskCreate(motorslewing, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_DEFAULT);
 }

@@ -57,7 +57,7 @@ void operatorControl() {
 	//than a roaming joystick
 	int joythresh = 10;
 	//int turnJoy = 50;                           				//sets the power of the motor
-	bool run = false;
+	bool run = true;
 	int intakeSpeed = 127;
 	float rightSpeed = 0;
 	float leftSpeed = 0;
@@ -87,10 +87,10 @@ void operatorControl() {
 	taskCreate(encoderMotor, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_DEFAULT);
 	while(1) {
 		run = true;
-		/*if (joystickGetDigital(1, 7, JOY_LEFT))
+		if (joystickGetDigital(1, 7, JOY_LEFT))
 		{
 			run = true;
-		}*/
+		}
 		if (run) {
 			//printf("printing");
 			//count = encoderGet(encoderRight);

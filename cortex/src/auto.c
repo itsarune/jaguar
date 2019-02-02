@@ -31,6 +31,6 @@
 void autonomous() {
   encoderReset(encoderRight);
   encoderReset(encoderLeft);
-  taskCreate(motorslewing, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_HIGHEST);
+  //taskCreate(motorslewing, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_HIGHEST);
   myAuton(1, 0);
 }
