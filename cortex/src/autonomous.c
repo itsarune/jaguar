@@ -8,7 +8,6 @@ void myAuton(int route, int position) {
   if (route == 1) {
     encoderReset(encoderRight);
     encoderReset(encoderLeft);
-    taskCreate(motorslewing, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_HIGHEST);
     int autonEndTime = millis() + 15000;
     printf("Starting autonomous code at %d", (int)millis());
     encoderMotorAutonomous(autonBackLeft, autonBackRight, -1200, -1200);

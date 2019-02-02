@@ -48,7 +48,6 @@ void operatorControl() {
 	}*/
 	encoderReset(encoderRight);
 	encoderReset(encoderLeft);
-	taskCreate(motorslewing, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_HIGHEST);
 	//encoderMotorAutonomous(autonBackLeft, autonBackRight, 1000, 1000);
 	//
 	//
@@ -157,7 +156,6 @@ void operatorControl() {
 				motorReq(armMotor1, -127);
 				motorReq(armMotor2, 40);
 			}
-
 			else if (joystickGetDigital(1, 7, JOY_DOWN)) {
 				motorReq(armMotor1, 127);
 				motorReq(armMotor2, -40);
