@@ -26,12 +26,12 @@ void myAuton(int route, int position) {
     motorReq(1, 127);
     encoderMotorAutonomous(autonBackLeft, autonBackRight, -700, -700);
     motorReq(1, 0);
-    encoderMotorAutonomous(autonStraightLeft, autonStraightRight, 1500, 1500);
+    /*encoderMotorAutonomous(autonStraightLeft, autonStraightRight, 1500, 1500);
     encoderTurn(90*turnMultiplierAuto);
     encoderMotorAutonomous(autonStraightLeft, autonStraightRight, 2000, 2000);
     chassisSet(127, 127);
     delay(2000);
-    chassisSet(0, 0);
+    chassisSet(0, 0);*/
     /*encoderMotorAutonomous(autonStraightLeft, autonStraightRight, 250, 250);
     encoderTurn(-90);
     encoderMotorAuto nomous(autonStraightLeft, autonStraightRight, 250, 250);*/
