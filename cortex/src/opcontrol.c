@@ -52,7 +52,9 @@ void operatorControl() {
 	float rightSpeed = 0;
 	float leftSpeed = 0;
 	float timeOfLastShot = 0;
+	float timeOfLastLiftPress = 0;
 	int reverseMultiplier = 1;
+	bool reverseNeeded = false;
 	/*int prevEncoderLeft = 0;
 	int prevEncoderRight = 0;
 	float driftMultiplierRight = 1;
@@ -119,6 +121,17 @@ void operatorControl() {
 				motorReq(rollerIntake, 0);
 			}
 
+			if (joystickGetDigital(1, 7, JOY_UP)) {
+				motorReq(armMotor1, -127);
+				motorReq(armMotor2, 40);
+			}
+
+			else if (joystickGetDigital(1, 7, JOY_DOWN)) {
+				motorReq(armMotor1, 127);
+				motorReq(armMotor2, -40);
+			}
+			else {motorReq(armMotor1, 0); motorReq(armMotor2, 0);}
+
 			if (joystickGetDigital(1, 8, JOY_UP)) {
 				motorReq(shooterMotor, -70);
 				timeOfLastShot = millis();
@@ -138,6 +151,21 @@ void operatorControl() {
 			{
 				motorReq(shooterMotor, 0);
 			}
+			/*if (millis() > timeOfLastLiftPress + 200)
+			{
+				if(motorGet(armMotor1) > 10)
+				{
+					motorReq(armMotor1, 0);
+					motorReq(armMotor2, 0);
+				}
+				else if(reverseNeeded)
+				{
+					motorReq(armMotor1, 127);
+					motorReq(armMotor2, -40);
+					timeOfLastLiftPress = millis();
+					reverseNeeded = false;
+				}
+			}*/
 		}
 		//tracking();
 	}
