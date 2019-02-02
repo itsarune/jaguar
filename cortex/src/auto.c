@@ -29,5 +29,8 @@
  * so, the robot will await a switch to another mode or disable/enable cycle.
  */
 void autonomous() {
-  myAuton(1, "red");
+  encoderReset(encoderRight);
+  encoderReset(encoderLeft);
+  taskCreate(motorslewing, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_HIGHEST);
+  myAuton(1, 1);
 }

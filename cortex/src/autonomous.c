@@ -1,8 +1,8 @@
 #include "autonomous.h"
 
 void myAuton(int route, int position) {
-  int turnMultiplier;
-  turnMultiplier = (position == 0) ? 1 : -1;
+  int turnMultiplierAuto;
+  turnMultiplierAuto = (position == 0) ? 1 : -1;
   if (route == 1) {
     encoderReset(encoderRight);
     encoderReset(encoderLeft);
@@ -15,12 +15,12 @@ void myAuton(int route, int position) {
     delay(1000);
     motorReq(1,0);
     encoderMotorAutonomous(autonStraightLeft, autonStraightRight, 500, 500);
-    encoderTurn(-90*turnMultiplier);
+    encoderTurn(-90*turnMultiplierAuto);
     flagShoot();
     motorReq(1, -127);
     encoderMotorAutonomous(autonStraightLeft, autonStraightRight, 400, 400);
     motorReq(1, 0);
-    encoderTurn(90*turnMultiplier);
+    encoderTurn(90*turnMultiplierAuto);
     motorReq(1, 127);
     encoderMotorAutonomous(autonBackLeft, autonBackRight, -700, -700);
     motorReq(1, 0);
@@ -32,12 +32,12 @@ void myAuton(int route, int position) {
       return;
     }
   } else if (route == 2) {
-      encoderTurn(-45*turnMultiplier);
+      encoderTurn(-45*turnMultiplierAuto);
       motorReq(1, 127);
       encoderMotorAutonomous(autonBackLeft, autonBackRight, -600, -600);
       motorReq(1, 0);
       encoderMotorAutonomous(autonStraightLeft, autonStraightRight, 600, 600);
-      encoderTurn(-45*turnMultiplier);
+      encoderTurn(-45*turnMultiplierAuto);
       encoderMotorAutonomous(autonBackLeft, autonBackRight, -1500, -1500);
       encoderMotorAutonomous(autonBackLeft, autonBackRight, 1500, 1500);
       return;
