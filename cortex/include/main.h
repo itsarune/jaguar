@@ -94,6 +94,9 @@ void initialize();
  */
 void operatorControl();
 
+void myAuton(int route, int position);
+void flagShoot();
+
 //declare encoders
 Encoder encoderRight;
 Encoder encoderLeft;

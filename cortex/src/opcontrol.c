@@ -36,11 +36,15 @@
 float encoderConstant = 0.015;
 
 void operatorControl() {
+	/*TaskHandle autonTask = taskCreate(autonomous, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_HIGHEST);
+	delay(15000);
+	taskDelete(autonTask);*/
+	//autonomous();
 	encoderReset(encoderRight);
 	encoderReset(encoderLeft);
 	taskCreate(motorslewing, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_HIGHEST);
 	//taskCreate(shoot, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
-	//_DRONE_CONTROL_
+	//_DRONE_CONTROL_ 
 
 	//this variable ensures that each movement was meant to occur rather
 	//than a roaming joystick
@@ -48,10 +52,10 @@ void operatorControl() {
 	//int turnJoy = 50;                           				//sets the power of the motor
 	bool run = false;
 	int intakeSpeed = 127;
-	float timeOfLastShot = 0;
-	float timeOfLastLiftPress = 0;
+	//float timeOfLastShot = 0;
+	//float timeOfLastLiftPress = 0;
 	int reverseMultiplier = 1;
-	bool reverseNeeded = false;
+	//bool reverseNeeded = false;
 	/*int prevEncoderLeft = 0;
 	int prevEncoderRight = 0;
 	float driftMultiplierRight = 1;
@@ -76,7 +80,14 @@ if (abs(joystickGetAnalog(1, 3)) > joythresh){
 				leftSpeed = 0;
 			}
 			if (abs(joystickGetAnalog(1, 2)) > joythresh){
-				rightSpeed = joystickGetAnalog(1, 2);
+				if(abs(joystickGetAnalog(1, 2)) > 108)
+				{
+					rightSpeed = joystickGetAnalog(1, 2);
+				}
+				else
+				{
+					rightSpeed = joystickGetAnalog(1, 2);
+				}
 			} else {
 				rightSpeed = 0;
 			}
@@ -96,52 +107,48 @@ if (abs(joystickGetAnalog(1, 3)) > joythresh){
 			//chassisSet(leftSpeed, rightSpeed);
 				if(reverseMultiplier == 1)
 				{
-					chassisSet(leftSpeed, rightSpeed);
+					chassisSet(leftSpeed * 0.5, rightSpeed);
 				}
 				else
 				{
-					chassisSet(rightSpeed, leftSpeed);
+					chassisSet(rightSpeed * 0.5, leftSpeed);
 				}
 			delay(2);
 			if (joystickGetDigital(1, 5, JOY_DOWN)) {
 				motorReq(rollerIntake, -intakeSpeed);
+				motorReq(topIntake, -intakeSpeed);
 			}
 			else if(joystickGetDigital(1, 6, JOY_DOWN)) {
 				motorReq(rollerIntake, intakeSpeed);
+				motorReq(topIntake, intakeSpeed);
 			}
 			else {
 				motorReq(rollerIntake, 0);
+				motorReq(topIntake, 0);
 			}
 
 			if (joystickGetDigital(1, 7, JOY_UP)) {
 				motorReq(armMotor1, -127);
-				motorReq(armMotor2, 40);
 			}
 
 			else if (joystickGetDigital(1, 7, JOY_DOWN)) {
 				motorReq(armMotor1, 127);
-				motorReq(armMotor2, -40);
 			}
-			else {motorReq(armMotor1, 0); motorReq(armMotor2, 0);}
+			else {motorReq(armMotor1, 0);}
 
 			if (joystickGetDigital(1, 8, JOY_UP)) {
 				motorReq(shooterMotor, -70);
-				timeOfLastShot = millis();
 			}	
-			if (joystickGetDigital(1, 8, JOY_DOWN)) {
+			else if (joystickGetDigital(1, 8, JOY_DOWN)) {
 				motorReq(shooterMotor, 128);
-				timeOfLastShot = millis();
 			}
+			else {motorReq(shooterMotor, 0);}
 
-			if (joystickGetDigital(1, 7, JOY_RIGHT))
+		if (joystickGetDigital(1, 7, JOY_RIGHT))
 			{
 				run = false;
 				rightSpeed = 0;
 				leftSpeed = 0;
-			}
-			if (millis() > timeOfLastShot + 500)
-			{
-				motorReq(shooterMotor, 0);
 			}
 			/*if (millis() > timeOfLastLiftPress + 200)
 			{
