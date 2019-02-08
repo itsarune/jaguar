@@ -137,7 +137,7 @@ if (abs(joystickGetAnalog(1, 3)) > joythresh){
 			else {motorReq(armMotor1, 0);}
 
 			if (joystickGetDigital(1, 8, JOY_UP)) {
-				motorReq(shooterMotor, -70);
+				motorReq(shooterMotor, -128);
 			}	
 			else if (joystickGetDigital(1, 8, JOY_DOWN)) {
 				motorReq(shooterMotor, 128);
