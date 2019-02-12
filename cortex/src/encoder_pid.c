@@ -14,6 +14,28 @@ void pidSet(pid_info* pid,
 int encoderLeftOffset;
 int encoderRightOffset;
 
+void encodeMe(int distLeft, int distRight) {
+  int tempLeftDist;
+  int tempRightDist;
+  while ((distLeft > 0) || (distRight > 0)) { 
+    if (distLeft>500) {
+      tempLeftDist = 500;
+      distLeft -= 500;
+    } else { 
+      tempLeftDist = distLeft;
+      distLeft = 0;
+    }
+    if (distRight > 500) {
+      tempRightDist = 500;
+      distRight -= 500;
+    } else {
+      tempRightDist = distRight;
+      distRight = 0;
+    }
+    encoderMotorAutonomous(autonBackLeft, autonBackRight, tempLeftDist, tempRightDist);
+  }
+}
+
 int getEncoderLeft() {
   return encoderGet(encoderLeft) + encoderLeftOffset;
 }

@@ -40,6 +40,8 @@ void encoderMotor(void * parameter);
   Uses the quad encoder and PID controller to reach the PID target
 */
 
+void encodeMe(int distLeft, int distRight);
+
 void encoderMotorAutonomous(pid_info leftPID, pid_info rightPID, int targetLeft, int targetRight);
 
 void pidSet(pid_info* pid,

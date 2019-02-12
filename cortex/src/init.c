@@ -49,7 +49,7 @@ void initialize() {
   pidSet(&driveTurnRight, 0, 0, 0, rightMotor1);
   pidSet(&driveTurnLeft, 0, 0, 0, leftMotor1);
   pidSet(&driveStraightLeft, 0.3, 0.00015, 0.12, leftMotor1);
-  pidSet(&autonStraightLeft, 0.65, 0.000001, 0.27, leftMotor1);
+  pidSet(&autonStraightLeft, 0.25, 0.000001, 0.27, leftMotor1);
   pidSet(&autonStraightRight, 0.161, 0.016, 0.49, rightMotor1);
   pidSet(&autonBackRight, 0.125, 0.00000001, 0.17, rightMotor1);
   pidSet(&autonBackLeft, 0.18, 0.000000001, 0.13, leftMotor1);

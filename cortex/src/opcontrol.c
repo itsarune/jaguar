@@ -36,9 +36,6 @@
 float encoderConstant = 0.015;
 
 void operatorControl() {
-	/*TaskHandle autonTask = taskCreate(autonomous, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_HIGHEST);
-	delay(15000);
-	taskDelete(autonTask);*/
 	//autonomous();
 	encoderReset(encoderRight);
 	encoderReset(encoderLeft);
@@ -60,6 +57,15 @@ void operatorControl() {
 	int prevEncoderRight = 0;
 	float driftMultiplierRight = 1;
 	float driftMultiplierLeft = 1;*/
+	/*TaskHandle autonTask;
+	while (1){
+		if (joystickGetDigital(1, 7, JOY_LEFT)) {
+			autonTask = taskCreate(autonomous, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
+			break;
+		}
+	}
+	delay(15000);
+	taskDelete(autonTask);*/
 	printf("start");
 	while(1) {
 		if (joystickGetDigital(1, 7, JOY_LEFT))
@@ -70,7 +76,6 @@ void operatorControl() {
 			//printf("printing");
 			//count = encoderGet(encoderRight);
 			//printf("\nthe encoder value%d, %d", count, encoderGet(encoderLeft));
-
 			float rightSpeed = 0;
 			float leftSpeed = 0;
 
