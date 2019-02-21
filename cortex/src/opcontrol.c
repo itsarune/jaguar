@@ -66,21 +66,33 @@ void operatorControl() {
 	bool reverseRequired = false;
 	int reverseMultiplier = 1;
 	float timeOfLastLift = 0;
+    while (1) {
+	    if (joystickGetDigital(1,7, JOY_LEFT)) {
+		    motorReq(rollerIntake, 0);
+		    break;
+	    }
+	    printf("ready?\n");
+	    delay(20);
+	}
+    TaskHandle auton = taskCreate(autonomous, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_DEFAULT);
+    delay(15000);
+    taskDelete(auton)
 	/*int prevEncoderLeft = 0;
 	int prevEncoderRight = 0;
 	float driftMultiplierRight = 1;
 	float driftMultiplierLeft = 1;*/
 	printf("start");
-	/*while (1) {
+	while (1) {
 		if (joystickGetDigital(1,7, JOY_LEFT)) {
 			motorReq(rollerIntake, 0);
 			break;
 		}
 		printf("ready?\n");
-		motorReq(rollerIntake, -100);
 		delay(20);
-	}*/
-
+	}
+    TaskHandle auton = taskCreate(autonomous, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_DEFAULT);
+    delay(15000);
+    taskDelete(auton);
 	//encoderTurn(90);
 	/*encoderMotorAutonomous(autonStraightLeft, autonStraightRight, 1000, 1000);
 	encoderTurn(60);*/
