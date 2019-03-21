@@ -19,8 +19,6 @@ bool motor_pid_run[11];
 int motor_pid[11];
 pidData motorPIDData[11];
 
-int mainDriveMotor[2] = {1, 4};
-
 typedef struct pidData {
   float sense;
   double p,i,d;
@@ -28,8 +26,6 @@ typedef struct pidData {
   int integral;
   int error, derivative, speed;
   int target, lastTarget, timePassed;
-  bool driveMotorLeft;
-  bool driveMotorRight;
 } pidData;
 
 void Reset(pidData* data)
