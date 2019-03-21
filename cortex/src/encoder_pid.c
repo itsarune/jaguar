@@ -2,13 +2,11 @@
 #include "tracking.h"
 
 //sets the PID controller values for each instance
-void pidSet(pid_info* pid,
-  double p, double i, double d,
-  double motor) {
+void pidSet(pidData* pid,
+  double p, double i, double d) {
     pid->p = p;                 //sets the proportional value
     pid->i = i;                 //sets the integral value
     pid->d = d;                 //sets the derivative value
-    pid->motor = motor;         //stores which motor this PID info is relevant to
   }
 
 int encoderLeftOffset;
@@ -49,6 +47,7 @@ int getEncoderRight() {
 */
 typedef struct pidData {
   float sense;
+  double p,i,d;
   int lastError, errorLongTimeAgo;
   int integral;
   int error, derivative, speed;
