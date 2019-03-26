@@ -11,21 +11,15 @@ void motorReq(int channel, int speed);
 void motorslewing(void * parameter);  //manages speed of motors
 
 /*
- * PID Data controllers for motors
- * */
-typedef struct pidData {
-  float sense;
-  double p,i,d;
-  int lastError, errorLongTimeAgo;
-  int integral;
-  int error, derivative, speed;
-  int target, lastTarget, timePassed;
-} pidData;
-
-/*
  * Reset PID Data for an individual motor
  * */
 void Reset(pidData* data);
+
+/*  Gets value of the left encoder  */
+int getEncoderLeft();
+
+/*  Gets value fo the right encoder */
+int getEncoderRight();
 
 /*
   Begin PID movement for motor, by setting motor channel and motor target. 
@@ -40,11 +34,17 @@ void resetPID();
 /*
  * Calculate PID data based on error
  * */
-int pidData CalculatePID(pidData* data);
+int CalculatePID(pidData* data);
+
 
 /*
  * Start motor-slewing process for motors
  * */
 void motorslewing(void * parameter);
+
+/*  Request PID motor speed
+ *  Pass motor channel and requested speed
+ *  */
+void motorReq(int channel, int speed);
 
 #endif
