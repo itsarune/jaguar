@@ -11,7 +11,6 @@
  */
 
 #include "main.h"
-#include "encoder_pid.h"
 #include "chassis.h"
 #include "motorslew.h"
 

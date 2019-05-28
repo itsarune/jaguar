@@ -145,7 +145,7 @@ void tracking()
         angle = 360 + angle;
       }
       changeOffsets(encoderGet(encoderRight), encoderGet(encoderLeft));
-      encoderReset(encoderRight);
+      encoderReset(encoiderRight);
       encoderReset(encoderLeft);
     }
     if (prevaction == 3)
