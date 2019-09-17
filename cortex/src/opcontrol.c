@@ -74,9 +74,9 @@ void operatorControl() {
 	    printf("ready?\n");
 	    delay(20);
 	}
-    TaskHandle auton = taskCreate(autonomous, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_DEFAULT);
+    /*TaskHandle auton = taskCreate(autonomous, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_DEFAULT);
     delay(15000);
-    taskDelete(auton)
+    taskDelete(auton)*/
 	/*int prevEncoderLeft = 0;
 	int prevEncoderRight = 0;
 	float driftMultiplierRight = 1;
@@ -90,9 +90,9 @@ void operatorControl() {
 		printf("ready?\n");
 		delay(20);
 	}
-    TaskHandle auton = taskCreate(autonomous, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_DEFAULT);
+    /*TaskHandle auton = taskCreate(autonomous, TASK_DEFAULT_STACK_SIZE, NULL,	TASK_PRIORITY_DEFAULT);
     delay(15000);
-    taskDelete(auton);
+    taskDelete(auton);*/
 	//encoderTurn(90);
 	/*encoderMotorAutonomous(autonStraightLeft, autonStraightRight, 1000, 1000);
 	encoderTurn(60);*/
