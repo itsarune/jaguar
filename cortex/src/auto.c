@@ -36,7 +36,7 @@ void autonomous() {
 }
 
 
-void myAuton(int route, int position) {
+void myAuton2(int route, int position) {
   int turnMultiplierAuto = (position == 0) ? 1 : -1;
   if (route == 1) {
     while (encoderGet(encoderLeft) < 300) {
@@ -96,7 +96,7 @@ void myAuton(int route, int position) {
   }
 }
 
-void flagShoot() {
+void flagShoot2() {
   motorReq(shooterMotor, 127);
   delay(1500);
   motorReq(shooterMotor, 0);
