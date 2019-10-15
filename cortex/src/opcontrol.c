@@ -127,7 +127,7 @@ if (abs(joystickGetAnalog(1, 3)) > joythresh){
 			}
 			else if(joystickGetDigital(1, 6, JOY_DOWN)) {
 				motorReq(rollerIntake, intakeSpeed);
-				motorReq(topIntake, intakeSpeed);
+				motorReq(topIntake, intakeSpeed*3);
 			}
 			else {
 				motorReq(rollerIntake, 0);
